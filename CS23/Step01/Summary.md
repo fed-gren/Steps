@@ -206,7 +206,7 @@ BOOL 타입으로 만든 8비트 덧셈기에 값을 전달하고, 전달받은 
       return answer;
     }
 
-[](https://www.notion.so/39e879a16075416eb70fc40c6318976b#fbc0364769ac4e3e87638a852fec8b8a)
+![image](https://www.notion.so/39e879a16075416eb70fc40c6318976b#fbc0364769ac4e3e87638a852fec8b8a)
 
 ### 미션 2
 
