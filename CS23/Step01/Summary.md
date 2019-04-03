@@ -228,7 +228,7 @@ BOOL 타입으로 만든 8비트 덧셈기에 값을 전달하고, 전달받은 
       return answer;
     }
 
-[](https://www.notion.so/39e879a16075416eb70fc40c6318976b#9b02a42dc3ef44cd9734310b1d636fb9)
+![미션2 이미지](https://www.notion.so/gren/Step-1-39e879a16075416eb70fc40c6318976b#9b02a42dc3ef44cd9734310b1d636fb9)
 
 ### 정리
 
