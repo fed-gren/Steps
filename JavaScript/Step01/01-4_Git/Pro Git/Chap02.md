@@ -9,11 +9,15 @@ Git에서 자주 사용하는 명령어는 모두 2장에 있다.(중요!!)
 - 실수를 만회하는 방법
 - 프로젝트 히스토리를 조회하고 커밋을 비교하는 방법
 - 리모트 저장소에 Push하고 Pull하는 방법
+---
+<br>
 
 ## 2.1 Git 저장소 만들기
 Git 저장소를 사용하는 두 가지 방법
 1. 아직 버전관리를 하지 않는 로컬 디렉토리를 하나 선택 후 Git 저장소를 적용
 2. 다른 어딘가에서 Git 저장소를 Clone 하는 방법
+
+<br>
 
 ### 기존 디렉토리를 Git 저장소로 만들기
 Git 저장소로 만들고 싶은 디렉토리로 이동 후, 아래 명령을 실행한다.
@@ -33,6 +37,8 @@ Git 연습용 커밋입니다.
 위에서 commit 뒤에 -m은 커밋 메시지를 작성한다는 의미이다. 이 옵션을 제외하고 commit 명령만 입력하면 vim에디터가 열리고 커밋 메시지를 작성할 수 있다.  
 
 커밋 메시지를 간략하게 요약한 제목과 자세하게 설명한 본문을 나눠서 작성하는 것이 좋다.
+
+<br>
 
 ### 기존 저장소를 Clone 하기
 다른 프로젝트에 참여하려하거나(Contribute) Git 저장소를 복사하고 싶을 때 git clone 명령을 사용한다. git clone을 하면 프로젝트 히스토리를 전부 받아온다. 실제로 서버의 디스크가 망가져도 클라이언트 저장소 중에서 아무거나 하나 가져다 복구하면 된다.(서버에만 적용했던 설저은 복구하지 못하지만 모든 데이터는 복구된다.)
@@ -55,6 +61,8 @@ Git은 다양한 프로토콜을 지원한다.(자세한 내용은 서버에 Git
 - https://
 - git://
 - SSH
+---
+<br>
 
 ## 2.2 수정하고 저장소에 저장하기
 
@@ -72,6 +80,8 @@ Git 저장소를 만들었으니 파일을 수정하고 파일의 `스냅샷`을
 
 아래는 Git 버전관리 라이프 사이클이다.
 ![Git 버전관리 라이프 사이클](https://git-scm.com/book/en/v2/images/lifecycle.png)
+
+<br>
 
 ### 파일의 상태 확인하기
 
@@ -98,6 +108,8 @@ nothing added to commit but untracked files present (use "git add" to track)
 ```
 README 파일은 `Untracked files`부분에 속해있는데 이것은 README 파일이 Untracked 상태라는 것을 말한다. Git은 Untracked 파일을 아직 스냅샷(커밋)에 넣어지지 않은 파일이라고 본다. 파일이 Tracked 상태가 되기 전까지 Git은 절대 그 파일을 커밋하지 않는다. 그래서 일하면서 생성하는 바이너리 파일 같은 것을 커밋하는 실수는 하지 않게 된다. README 파일을 추가해서 직접 Tracked 상태로 만들자.
 
+<br>
+
 ### 파일을 새로 추적하기
 
 git add 명령으로 파일을 새로 추적할 수 있다. 아래 명령을 실행하면 Git은 README 파일을 추적한다.
@@ -114,6 +126,8 @@ Changes to be committed:
         new file:   README
 ```
 `Changed to be committed`에 들어있는 파일은 Staged 상태라는 것을 의미한다. 커밋하면 git add를 실행한 시점의 파일이 커밋되어 저장소 히스토리에 남는다. git add 명령은 파일 또는 디렉토리의 경로를 argument로 받는다. 디렉토리면 아래에 있는 모든 파일들까지 재귀적으로 추가한다.
+
+<br>
 
 ### Modified 상태의 파일을 Stage 하기
 
@@ -178,6 +192,8 @@ Changes to be committed:
     modified:   CONTRIBUTING.md
 ```
 
+<br>
+
 ### 파일 상태 짤막하게 확인하기
 
 git status 명령으로 확인할 수 있는 내용이 많다. 간단하게 볼 수 있는 옵션이 있다.  
@@ -198,6 +214,8 @@ M  lib/simplegit.rb
 README 파일 같은 경우 내용을 변경했지만 아직 Staged 상태로 추가하지 않은 것이다.  
 lib/simplegit.rb 파일은 내용을 변경하고 Staged 상태로 추가까지 한 상태이다.  
 Rakefile은 변경하고 Staged 상태로 추가한 후 또 내용을 변경해서 Staged 이면서 Unstaged 상태인 파일이다.
+
+<br>
 
 ### 파일 무시하기
 
@@ -244,6 +262,8 @@ doc/*.txt
 doc/**/*.pdf
 ```
 .gitignore를 사용하는 간단한 방식은 하나의 .gitignore 파일을 최상위 디렉토리에 하나 두고 모든 하위 디렉토리까지 적용시키는 방식. (하위 디렉토리에 따로 생성또한 가능)
+
+<br>
 
 ### Staged와 Unstaged 상태의 변경 내용을 보기
 
@@ -322,9 +342,20 @@ index c669690..b11e3f3 100644
 +edit
 ```
 
+<br>
+
 ### 변경사항 커밋하기
+
+<br>
+
 ### Staging Area 생략하기
+
+<br>
+
 ### 파일 삭제하기
+
+<br>
+
 ### 파일 이름 변경하기
 
 
@@ -332,19 +363,28 @@ index c669690..b11e3f3 100644
 - [Github .gitignore 예제](https://github.com/github/gitignore)
 - [gitignore.io](https://www.gitignore.io/) : 운영체제, 개발환경, 프로그래밍 언어에 따른 gitignore 파일 내용을 자동으로 생성해주는 사이트
 
-## 2.3 커밋 히스토리 조회하기
+---
+<br>
 
+
+## 2.3 커밋 히스토리 조회하기
+---
+<br>
 
 ## 2.4 되돌리기
-
+---
+<br>
 
 ## 2.5 리모트 저장소
-
+---
+<br>
 
 ## 2.6 태그
-
+---
+<br>
 
 ## 2.7 Git Alias
-
+---
+<br>
 
 ## 2.8 요약
