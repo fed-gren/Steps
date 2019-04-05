@@ -1,0 +1,1 @@
+exports.throwDice = () => Math.floor(Math.random() * 6 + 1);
