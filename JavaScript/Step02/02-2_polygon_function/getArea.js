@@ -1,13 +1,20 @@
 const { PI, pow } = Math;
 const logArr = [],
-      logRes = [];
+  logRes = [];
 
 const CIRCLE_NAME = "circle",
-      RECT_NAME = "rect",
-      TRAPE_NAME = "trapezoid";
+  RECT_NAME = "rect",
+  TRAPE_NAME = "trapezoid";
 
 const printExecutionSequence = _ => {
-  console.log(logArr.join(", "));
+  // console.log(logArr.join(", "));
+
+  //추가 미션 구현
+  let logStr = "";
+  logArr.forEach((el, idx) => {
+    logStr += `${logArr[idx]} - ${logRes[idx]}\n`;
+  });
+  console.log(logStr);
 };
 
 const logExecution = (polygonName, polygonArea) => {
@@ -48,7 +55,10 @@ const getArea = (polygonName, ...params) => {
   let area = 0;
   switch (polygonName) {
     case CIRCLE_NAME:
-      area = (2 === params.length) ? getTotalCircleArea(params[1]) : getCircleArea(params[0])
+      area =
+        2 === params.length
+          ? getTotalCircleArea(params[1])
+          : getCircleArea(params[0]);
       break;
     case RECT_NAME:
       area = getRectArea(...params);
