@@ -1,0 +1,6 @@
+module.exports = {
+  START_TEXT_ADDR: 0,
+  END_TEXT_ADDR: 65535,
+  START_HEAP_ADDR: 65536,
+  END_HEAP_ADDR: 131071
+};
