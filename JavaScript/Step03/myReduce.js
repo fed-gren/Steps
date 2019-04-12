@@ -1,11 +1,13 @@
 //Array reduce method 구현하기
 function myReduce(callback, initialValue) {
-  for(value of this) {
+  let currentIndex = 0;
+  const arr = this;
+  for([currentIndex, value] of Object.entries(this)) {
     if(initialValue === undefined) {
       initialValue = this[0];
       continue;
     }
-    initialValue = callback(initialValue, value) //initialValue를 누적값으로 사용하고, 순회하면서 현재값에 넣어준다!!
+    initialValue = callback(initialValue, value, currentIndex, arr) //initialValue를 누적값으로 사용하고, 순회하면서 현재값에 넣어준다!!
   }
   return initialValue;
 }
