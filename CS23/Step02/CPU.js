@@ -1,3 +1,5 @@
+const Memory = require("./Memory");
+
 class CPU {
   init() {
     this.regAddress = {
@@ -11,6 +13,23 @@ class CPU {
       R7: 0b111
     };
     this.regValues = [0, 0, 0, 0, 0, 0, 0, 0];
+
+    this.ALU = {
+      ADD(reg1, reg2, dstReg) {
+        console.log("add");
+      },
+      SUB(reg1, reg2, dstReg) {
+        console.log("sub");
+      },
+      AND(reg1, reg2, dstReg) {
+        console.log("and");
+      },
+      OR(reg1, reg2, dstReg) {
+        console.log("or");
+      },
+    };
+
+    this.myMemory = new Memory();
   }
 
   reset() {
@@ -39,3 +58,10 @@ class CPU {
 
 const myCPU = new CPU();
 myCPU.init();
+
+//test
+console.log(myCPU.ALU.ADD());
+console.log(myCPU.ALU.SUB());
+console.log(myCPU.ALU.AND());
+console.log(myCPU.ALU.OR());
+console.log(myCPU.myMemory.programCouter);  //-1
