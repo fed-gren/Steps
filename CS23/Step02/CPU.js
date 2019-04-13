@@ -12,7 +12,8 @@ class CPU {
       R6: 0b110,
       R7: 0b111
     };
-    this.regValues = [0, 1, 2, 3, 4, 5, 6, 7];
+
+    this.regValues = new Uint16Array(8);
   }
   initALU() {
     const thisCPU = this;
@@ -74,43 +75,53 @@ myCPU.init();
 
 //test
 let ALUTest = () => {
+  let a = new Uint16Array(1);
+  let b = new Uint16Array(1);
+  
+  let expectResult = new Uint16Array(1);
+
+  myCPU.regValues[myCPU.regAddress.R1] = 0x1111;
+  myCPU.regValues[myCPU.regAddress.R2] = 0x1001;
+  a[0] = myCPU.regValues[myCPU.regAddress.R1];
+  b[0] = myCPU.regValues[myCPU.regAddress.R2];
+
   //add test
-  let a = myCPU.regValues[myCPU.regAddress.R1];
-  let b = myCPU.regValues[myCPU.regAddress.R2];
-  let expectResult = a + b;
+  expectResult[0] = a[0] + b[0];
   myCPU.ALU.ADD(myCPU.regAddress.R1, myCPU.regAddress.R2, myCPU.regAddress.R7);
   if(myCPU.regValues[myCPU.regAddress.R7] != expectResult) {
-    throw Error(`ADD의 결과가 기대하던 ${expectResult} 와(과) 다릅니다.`);
+    throw Error(`ADD의 결과 ${myCPU.regValues[myCPU.regAddress.R7].toString(16)}가
+    기대하던 ${expectResult.toString(16)} 와(과) 다릅니다.`);
   }
+  console.log(`ADD 결과 R7 : ${myCPU.regValues[myCPU.regAddress.R7].toString(16)}`);
 
   //sub test
-  a = myCPU.regValues[myCPU.regAddress.R1];
-  b = myCPU.regValues[myCPU.regAddress.R2];
   expectResult = a - b;
   myCPU.ALU.SUB(myCPU.regAddress.R1, myCPU.regAddress.R2, myCPU.regAddress.R7);
   if(myCPU.regValues[myCPU.regAddress.R7] != expectResult) {
-    throw Error(`SUB의 결과가 기대하던 ${expectResult} 와(과) 다릅니다.`);
+    throw Error(`SUB의 결과 ${myCPU.regValues[myCPU.regAddress.R7].toString(16)}가
+    기대하던 ${expectResult.toString(16)} 와(과) 다릅니다.`);
   }
+  console.log(`SUB 결과 R7 : ${myCPU.regValues[myCPU.regAddress.R7].toString(16)}`);
 
   //and test
-  a = myCPU.regValues[myCPU.regAddress.R1];
-  b = myCPU.regValues[myCPU.regAddress.R2];
   expectResult = a & b;
   myCPU.ALU.AND(myCPU.regAddress.R1, myCPU.regAddress.R2, myCPU.regAddress.R7);
   if(myCPU.regValues[myCPU.regAddress.R7] != expectResult) {
-    throw Error(`AND의 결과가 기대하던 ${expectResult} 와(과) 다릅니다.`);
+    throw Error(`AND의 결과 ${myCPU.regValues[myCPU.regAddress.R7].toString(16)}가
+    기대하던 ${expectResult.toString(16)} 와(과) 다릅니다.`);
   }
+  console.log(`AND 결과 R7 : ${myCPU.regValues[myCPU.regAddress.R7].toString(16)}`);
 
   //or test
-  a = myCPU.regValues[myCPU.regAddress.R1];
-  b = myCPU.regValues[myCPU.regAddress.R2];
   expectResult = a | b;
   myCPU.ALU.OR(myCPU.regAddress.R1, myCPU.regAddress.R2, myCPU.regAddress.R7);
   if(myCPU.regValues[myCPU.regAddress.R7] != expectResult) {
-    throw Error(`OR의 결과가 기대하던 ${expectResult} 와(과) 다릅니다.`);
+    throw Error(`OR의 결과 ${myCPU.regValues[myCPU.regAddress.R7].toString(16)}가
+    기대하던 ${expectResult.toString(16)} 와(과) 다릅니다.`);
   }
+  console.log(`OR 결과 R7 : ${myCPU.regValues[myCPU.regAddress.R7].toString(16)}`);
 
   console.log("ALU 연산 테스트 결과 : OK");
 }
 
-// ALUTest();
+ALUTest();
