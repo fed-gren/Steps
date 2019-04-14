@@ -121,20 +121,22 @@ const ALUTest = () => {
     기대하던 ${expectResult.toString(16)} 와(과) 다릅니다.`);
   }
   console.log(`OR 결과 R7 : ${myCPU.regValues[myCPU.regAddress.R7].toString(16)}`);
-
-  console.log("ALU 연산 테스트 결과 : OK");
+  console.log("ALU function test result : OK");
 }
-
-// ALUTest();
-
 
 const CPUFetchTest = () => {
   const program = [0x0001, 0x0002, 0x0004, 0x0008];
   myCPU.myMemory.locate(program);
-  console.log(myCPU.fetch().toString(16));   //0x0001
-  console.log(myCPU.fetch().toString(16));   //0x0002
-  console.log(myCPU.fetch().toString(16));   //0x0004
-  console.log(myCPU.fetch().toString(16));   //0x0008
+  if(program[myCPU.regValues[myCPU.regAddress.PC]] !== myCPU.fetch()) throw Error("CPU fetch test fail.");
+  if(program[myCPU.regValues[myCPU.regAddress.PC]] !== myCPU.fetch()) throw Error("CPU fetch test fail.");
+  if(program[myCPU.regValues[myCPU.regAddress.PC]] !== myCPU.fetch()) throw Error("CPU fetch test fail.");
+  if(program[myCPU.regValues[myCPU.regAddress.PC]] !== myCPU.fetch()) throw Error("CPU fetch test fail.");
+  console.log("fetch test result : OK");
 }
 
-CPUFetchTest();
+const CPUTest = () => {
+  // ALUTest();
+  // CPUFetchTest();
+}
+
+// CPUTest();
