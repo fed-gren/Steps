@@ -59,9 +59,27 @@ class CPU {
     return instruction[0];
   }
 
+  decode(instruction) {
+    //4bit instruction 받아서 어떤 명령어인지 return 한다.
+    let decodeResult = 0;
+    const firstInstruction = 0b0001;
+    if(firstInstruction) { decodeResult = 1 }
+    else if(firstInstruction + 1) { decodeResult = 2 }
+    else if(firstInstruction + 2) { decodeResult = 3 }
+    else if(firstInstruction + 3) { decodeResult = 4 }
+    else if(firstInstruction + 4) { decodeResult = 5 }
+    else if(firstInstruction + 5) { decodeResult = 6 }
+    else if(firstInstruction + 6) { decodeResult = 7 }
+    else if(firstInstruction + 7) { decodeResult = 8 }
+    else if(firstInstruction + 8) { decodeResult = 9 }
+    else if(firstInstruction + 9) { decodeResult = 10 }
+    else if(firstInstruction + 10) { decodeResult = 11 }
+
+    return decodeResult;
+  }
+
   execute(IR) {
     //전달한 명령어를 어떤 명령인지 분석해서 계산하거나 처리한다.
-
   }
 
   dump() {
