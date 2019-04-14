@@ -1,3 +1,4 @@
+const CPUMetaData = require("./CPUConstant");
 const Memory = require("./Memory");
 
 class CPU {
@@ -62,20 +63,22 @@ class CPU {
   decode(instruction) {
     //4bit instruction 받아서 어떤 명령어인지 return 한다.
     let decodeResult = 0;
-    const firstInstruction = 0b0001;
-    if(firstInstruction) { decodeResult = 1 }
-    else if(firstInstruction + 1) { decodeResult = 2 }
-    else if(firstInstruction + 2) { decodeResult = 3 }
-    else if(firstInstruction + 3) { decodeResult = 4 }
-    else if(firstInstruction + 4) { decodeResult = 5 }
-    else if(firstInstruction + 5) { decodeResult = 6 }
-    else if(firstInstruction + 6) { decodeResult = 7 }
-    else if(firstInstruction + 7) { decodeResult = 8 }
-    else if(firstInstruction + 8) { decodeResult = 9 }
-    else if(firstInstruction + 9) { decodeResult = 10 }
-    else if(firstInstruction + 10) { decodeResult = 11 }
-
+    if(instruction === CPUMetaData.LOAD_WITH_ADDRESS) { decodeResult = 1 }
+    else if(instruction === CPUMetaData.LOAD_WITH_VALUE) { decodeResult = 2 }
+    else if(instruction === CPUMetaData.STORE_WITH_ADDRESS) { decodeResult = 3 }
+    else if(instruction === CPUMetaData.STORE_WITH_VALUE) { decodeResult = 4 }
+    else if(instruction === CPUMetaData.AND_WITH_ADDRESS) { decodeResult = 5 }
+    else if(instruction === CPUMetaData.OR_WITH_ADDRESS) { decodeResult = 6 }
+    else if(instruction === CPUMetaData.ADD_WITH_ADDRESS) { decodeResult = 7 }
+    else if(instruction === CPUMetaData.ADD_WITH_VALUE) { decodeResult = 8 }
+    else if(instruction === CPUMetaData.SUB_WITH_ADDRESS) { decodeResult = 9 }
+    else if(instruction === CPUMetaData.SUB_WITH_VALUE) { decodeResult = 10 }
+    else if(instruction === CPUMetaData.LOAD_WITH_ADDRESS) { decodeResult = 11 }
     return decodeResult;
+  }
+
+  instructionParser(IR) {
+    //입력된 명령어 파싱 해서 execute에 전달.
   }
 
   execute(IR) {
@@ -163,7 +166,7 @@ const CPUDumptest = () => {
 const CPUTest = () => {
   // ALUTest();
   // CPUFetchTest();
-  CPUDumptest();
+  // CPUDumptest();
 }
 
 CPUTest();
