@@ -12,9 +12,9 @@ class CPU {
       R6: 0b110,
       R7: 0b111
     };
-
     this.regValues = new Uint16Array(8);
   }
+
   initALU() {
     const thisCPU = this;
     this.ALU = {
@@ -48,14 +48,15 @@ class CPU {
 
   reset() {
     //레지스터값 모두 지우고 PC 0으로 초기화
-    this.init();
+    this.initRegisters();
   }
 
   fetch() {
     //현재 PC 값에 해당하는 메모리에서 프로그램 명령어를 가져와서 리턴한다. PC 카운트를 +1 증가시킨다.
     let instruction = new Uint16Array(1);
-
-    return instruction;
+    instruction[0] = this.myMemory.fetch(this.regValues[this.regAddress.PC]);
+    this.regValues[this.regAddress.PC] += 1;
+    return instruction[0];
   }
 
   execute(IR) {
@@ -74,7 +75,7 @@ const myCPU = new CPU();
 myCPU.init();
 
 //test
-let ALUTest = () => {
+const ALUTest = () => {
   let a = new Uint16Array(1);
   let b = new Uint16Array(1);
   
@@ -124,4 +125,16 @@ let ALUTest = () => {
   console.log("ALU 연산 테스트 결과 : OK");
 }
 
-ALUTest();
+// ALUTest();
+
+
+const CPUFetchTest = () => {
+  const program = [0x0001, 0x0002, 0x0004, 0x0008];
+  myCPU.myMemory.locate(program);
+  console.log(myCPU.fetch().toString(16));   //0x0001
+  console.log(myCPU.fetch().toString(16));   //0x0002
+  console.log(myCPU.fetch().toString(16));   //0x0004
+  console.log(myCPU.fetch().toString(16));   //0x0008
+}
+
+CPUFetchTest();
