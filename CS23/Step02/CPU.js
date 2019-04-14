@@ -61,12 +61,16 @@ class CPU {
 
   execute(IR) {
     //전달한 명령어를 어떤 명령인지 분석해서 계산하거나 처리한다.
+
   }
 
   dump() {
     //REGISTER들 값을 배열에 넣어서 리턴
     const dumpList = [];
-
+    const regLen = this.regValues.length;
+    for(let i=0; i<regLen; i+=1) {
+      dumpList[i] = this.regValues[i];
+    }
     return dumpList;
   }
 }
@@ -134,9 +138,14 @@ const CPUFetchTest = () => {
   console.log("fetch test result : OK");
 }
 
+const CPUDumptest = () => {
+  console.log(myCPU.dump());
+}
+
 const CPUTest = () => {
   // ALUTest();
   // CPUFetchTest();
+  CPUDumptest();
 }
 
-// CPUTest();
+CPUTest();
