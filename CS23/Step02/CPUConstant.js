@@ -9,5 +9,13 @@ module.exports = {
   ADD_WITH_VALUE: 0b1000,
   SUB_WITH_ADDRESS: 0b1001,
   SUB_WITH_VALUE: 0b1010,
-  LOAD_WITH_ADDRESS: 0b1011,
-}
+  MOV: 0b1011,
+  PC: 0b000,
+  R1: 0b001,
+  R2: 0b010,
+  R3: 0b011,
+  R4: 0b100,
+  R5: 0b101,
+  R6: 0b110,
+  R7: 0b111,
+};
