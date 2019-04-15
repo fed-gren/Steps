@@ -66,10 +66,25 @@ const CPUDumptest = () => {
   console.log(myCPU.dump());
 }
 
+const CPUExecuteTest = () => {
+  myCPU.execute(0b0001101010000010);  //LOAD
+  myCPU.execute(0b0010101010101010);  //LOAD
+  myCPU.execute(0b0011101010101010);  //STORE
+  myCPU.execute(0b0100101010101010);  //STORE
+  myCPU.execute(0b0101101010101010);  //AND
+  myCPU.execute(0b0110101010101010);  //OR
+  myCPU.execute(0b0111101010101010);  //ADD
+  myCPU.execute(0b1000101010101010);  //ADD
+  myCPU.execute(0b1001101010101010);  //SUB
+  myCPU.execute(0b1010101010101010);  //SUB
+  myCPU.execute(0b1011101010101010);  //MOV
+}
+
 const CPUTest = () => {
-  ALUTest();
-  CPUFetchTest();
-  CPUDumptest();
+  // ALUTest();
+  // CPUFetchTest();
+  // CPUDumptest();
+  CPUExecuteTest();
 }
 
 CPUTest();
