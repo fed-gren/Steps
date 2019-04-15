@@ -110,7 +110,7 @@ module.exports = class CPU {
     }
 
     else if(instruction === 4) {
-      console.log("STROE with value");
+      console.log("STORE with value");
       let address = this.regValues[reg1] + value;
       let data = this.regValues[dstReg];
       this.myMemory.store(address, data);
