@@ -77,12 +77,81 @@ module.exports = class CPU {
     return decodeResult;
   }
 
-  instructionParser(IR) {
-    //입력된 명령어 파싱 해서 execute에 전달.
-  }
-
   execute(IR) {
     //전달한 명령어를 어떤 명령인지 분석해서 계산하거나 처리한다.
+    //명령어 길이 맞추기.
+    let str = IR.toString(2).padStart(16, "0");
+    //명령어 조건에 맞게 파싱하기.
+    let IRStr = str.substring(0,4);
+    let dstReg, reg1, reg2, value;
+    let instruction = parseInt(IRStr, 2);
+    dstReg = parseInt(str.substring(4, 7), 2);
+    reg1 = parseInt(str.substring(7, 10), 2);
+    reg2 = parseInt(str.substring(13), 2);
+    value = parseInt(str.substring(11), 2);
+
+    //LOAD -> myMemory.peek(address)
+    if(instruction === 1) {
+      console.log("LOAD with address");
+      let address = this.regValues[reg1] + this.regValues[reg2];
+      this.regValues[dstReg] = this.myMemory.peek(address);
+    }
+    else if(instruction === 2) {
+      console.log("LOAD with value");
+      let address = this.regValues[reg1] + value;
+      this.regValues[dstReg] = this.myMemory.peek(address);
+    }
+    //STORE -> myMemory.store(address, data)
+    else if(instruction === 3) {
+      console.log("STORE with address");
+      let address = this.regValues[reg1] + this.regValues[reg2];
+      let data = this.regValues[dstReg];
+      this.myMemory.store(address, data);
+    }
+
+    else if(instruction === 4) {
+      console.log("STROE with value");
+      let address = this.regValues[reg1] + value;
+      let data = this.regValues[dstReg];
+      this.myMemory.store(address, data);
+    }
+    //AND -> myCPU.ALU.AND();
+    else if(instruction === 5) {
+      console.log("AND");
+      this.ALU.AND(reg1, reg2, dstReg);
+    }
+    //OR -> myCPU.ALU.OR();
+    else if(instruction === 6) {
+      console.log("OR");
+      this.ALU.OR(reg1, reg2, dstReg);
+    }
+    //ADD -> myCPU.ALU.ADD();
+    else if(instruction === 7) {
+      console.log("ADD");
+      this.ALU.ADD(reg1, reg2, dstReg);
+    }
+    else if(instruction === 8) {
+      console.log("ADD");
+      this.regValues[dstReg] = this.regValues[reg1] + value;
+    }
+    //SUB -> myCPU.ALU.SUB();
+    else if(instruction === 9) {
+      console.log("SUB");
+      this.ALU.SUB(reg1, reg2, dstReg);
+    }
+    else if(instruction === 10) {
+      console.log("SUB");
+      this.regValues[dstReg] = this.regValues[reg1] - value;
+    }
+    //MOV -> myCPU.regValue[dstReg];
+    else if(instruction === 11) {
+      console.log("MOV");
+      value = parseInt(str.substring(7), 2);
+      this.regValues[dstReg] = value;
+    }
+    else {
+      throw Error("명령어 에러");
+    }
   }
 
   dump() {
