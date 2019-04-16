@@ -60,23 +60,6 @@ module.exports = class CPU {
     return instruction[0];
   }
 
-  decode(instruction) {
-    //4bit instruction 받아서 어떤 명령어인지 return 한다.
-    let decodeResult = 0;
-    if(instruction === CPUMetaData.LOAD_WITH_ADDRESS) { decodeResult = 1 }
-    else if(instruction === CPUMetaData.LOAD_WITH_VALUE) { decodeResult = 2 }
-    else if(instruction === CPUMetaData.STORE_WITH_ADDRESS) { decodeResult = 3 }
-    else if(instruction === CPUMetaData.STORE_WITH_VALUE) { decodeResult = 4 }
-    else if(instruction === CPUMetaData.AND_WITH_ADDRESS) { decodeResult = 5 }
-    else if(instruction === CPUMetaData.OR_WITH_ADDRESS) { decodeResult = 6 }
-    else if(instruction === CPUMetaData.ADD_WITH_ADDRESS) { decodeResult = 7 }
-    else if(instruction === CPUMetaData.ADD_WITH_VALUE) { decodeResult = 8 }
-    else if(instruction === CPUMetaData.SUB_WITH_ADDRESS) { decodeResult = 9 }
-    else if(instruction === CPUMetaData.SUB_WITH_VALUE) { decodeResult = 10 }
-    else if(instruction === CPUMetaData.LOAD_WITH_ADDRESS) { decodeResult = 11 }
-    return decodeResult;
-  }
-
   execute(IR) {
     //전달한 명령어를 어떤 명령인지 분석해서 계산하거나 처리한다.
     //명령어 길이 맞추기.
