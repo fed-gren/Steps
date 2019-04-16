@@ -75,60 +75,49 @@ module.exports = class CPU {
 
     //LOAD -> myMemory.peek(address)
     if(instruction === 1) {
-      console.log("LOAD with address");
       let address = this.regValues[reg1] + this.regValues[reg2];
       this.regValues[dstReg] = this.myMemory.peek(address);
     }
     else if(instruction === 2) {
-      console.log("LOAD with value");
       let address = this.regValues[reg1] + value;
       this.regValues[dstReg] = this.myMemory.peek(address);
     }
     //STORE -> myMemory.store(address, data)
     else if(instruction === 3) {
-      console.log("STORE with address");
       let address = this.regValues[reg1] + this.regValues[reg2];
       let data = this.regValues[dstReg];
       this.myMemory.store(address, data);
     }
 
     else if(instruction === 4) {
-      console.log("STORE with value");
       let address = this.regValues[reg1] + value;
       let data = this.regValues[dstReg];
       this.myMemory.store(address, data);
     }
     //AND -> myCPU.ALU.AND();
     else if(instruction === 5) {
-      console.log("AND");
       this.ALU.AND(reg1, reg2, dstReg);
     }
     //OR -> myCPU.ALU.OR();
     else if(instruction === 6) {
-      console.log("OR");
       this.ALU.OR(reg1, reg2, dstReg);
     }
     //ADD -> myCPU.ALU.ADD();
     else if(instruction === 7) {
-      console.log("ADD");
       this.ALU.ADD(reg1, reg2, dstReg);
     }
     else if(instruction === 8) {
-      console.log("ADD");
       this.regValues[dstReg] = this.regValues[reg1] + value;
     }
     //SUB -> myCPU.ALU.SUB();
     else if(instruction === 9) {
-      console.log("SUB");
       this.ALU.SUB(reg1, reg2, dstReg);
     }
     else if(instruction === 10) {
-      console.log("SUB");
       this.regValues[dstReg] = this.regValues[reg1] - value;
     }
     //MOV -> myCPU.regValue[dstReg];
     else if(instruction === 11) {
-      console.log("MOV");
       value = parseInt(str.substring(7), 2);
       this.regValues[dstReg] = value;
     }
