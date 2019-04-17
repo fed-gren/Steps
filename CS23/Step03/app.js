@@ -14,17 +14,29 @@ const app = () => {
     output: process.stdout
   });
 
-  function executePrompt() {
+  const getParsedCommand = command => {
+    //? 명령어를 입력받아 파싱한 후에 배열 형태로 반환한다.
+    const parsedCommand = command.split(" ");
+    return parsedCommand;
+  };
+
+  const executePrompt = () => {
     rl.question("/> ", function(command) {
-      if (command === "quit") return rl.close();
+      if (command === "quit") {
+        log("vmgit을 종료합니다.");
+        return rl.close();
+      }
+      const parsedCommand = getParsedCommand(command);
+      const execCommand = parsedCommand[0];
+      const parameter = parsedCommand[1];
       try {
-        vmgitFunctions[command]();
+        vmgitFunctions[execCommand](parameter);
       } catch (error) {
-        log(`입력한 명령어 ${command}는 지원하지 않습니다.`);
+        log(`입력한 명령어 ${command[0]}는 지원하지 않습니다.`);
       }
       executePrompt(); //Calling this function again to new command
     });
-  }
+  };
 
   executePrompt();
 };

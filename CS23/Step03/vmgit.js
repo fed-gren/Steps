@@ -6,11 +6,11 @@ module.exports = class VMGit {
     this.repoList = []; //? 저장소 객체를 담을 배열
   }
 
-  init() {
+  init(repoName) {
     //TODO: init - init() 함수 구현
     //? 생성할 저장소 명을 입력받아 저장소 객체 생성해서 전체 저장소 배열에 추가한다.
     //* 객체 구조 -> name(저장소명), id, updated(최종 갱신 날짜), fileList(저장소 내 파일리스트)
-    console.log("init() executed!");
+    console.log(`init() executed. repo name : ${repoName}`);
   }
 
   status() {
