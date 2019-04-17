@@ -27,7 +27,6 @@ const app = () => {
         return rl.close();
       }
       const parsedCommand = getParsedCommand(command);
-      log(parsedCommand);
       const execCommand = parsedCommand[0];
       parsedCommand.shift();
       const parameters = [...parsedCommand];
