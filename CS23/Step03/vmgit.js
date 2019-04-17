@@ -16,6 +16,11 @@ const generateRandomID = () => {
   return id;
 };
 
+const formatDate = date => {
+  return `${date.getFullYear()}-${date.getMonth() +
+    1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+};
+
 module.exports = class VMGit {
   init(repoName) {
     //TODO: init - init() 함수 구현
@@ -23,10 +28,11 @@ module.exports = class VMGit {
     //* 객체 구조 -> name(저장소명), id, updated(최종 갱신 날짜), fileList(저장소 내 파일리스트)
     console.log(`init() executed. repo name : ${repoName}`);
     const repoId = generateRandomID();
+    const currentDate = formatDate(new Date(Date.now()));
     const repoObj = {
       name: repoName,
       id: repoId,
-      updated: Date.now(),
+      updated: currentDate,
       files: []
     };
     repoList.push(repoObj);
