@@ -1,5 +1,18 @@
 //* 가상 깃 개발
 //TODO: init part 구현
+const { log } = console;
+const idList = [];
+
+const generateRandomID = () => {
+  let id;
+  while (true) {
+    id = Math.floor(Math.random() * 10000) + 1;
+    if (idList.indexOf(id) === -1) {
+      idList.push(id);
+      break;
+    }
+  }
+};
 
 module.exports = class VMGit {
   constructor() {
@@ -11,6 +24,8 @@ module.exports = class VMGit {
     //? 생성할 저장소 명을 입력받아 저장소 객체 생성해서 전체 저장소 배열에 추가한다.
     //* 객체 구조 -> name(저장소명), id, updated(최종 갱신 날짜), fileList(저장소 내 파일리스트)
     console.log(`init() executed. repo name : ${repoName}`);
+    generateRandomID();
+    log(`id List : ${idList}`);
   }
 
   status() {

@@ -32,7 +32,7 @@ const app = () => {
       try {
         vmgitFunctions[execCommand](parameter);
       } catch (error) {
-        log(`입력한 명령어 ${command[0]}는 지원하지 않습니다.`);
+        log(`입력한 명령어 ${execCommand}는 지원하지 않습니다.`);
       }
       executePrompt(); //Calling this function again to new command
     });
