@@ -29,9 +29,10 @@ const app = () => {
       const parsedCommand = getParsedCommand(command);
       log(parsedCommand);
       const execCommand = parsedCommand[0];
-      const parameter = parsedCommand[1];
+      parsedCommand.shift();
+      const parameters = [...parsedCommand];
       try {
-        vmgitFunctions[execCommand](parameter);
+        vmgitFunctions[execCommand](...parameters);
       } catch (error) {
         log(error);
       }
