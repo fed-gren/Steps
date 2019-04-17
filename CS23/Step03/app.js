@@ -27,12 +27,13 @@ const app = () => {
         return rl.close();
       }
       const parsedCommand = getParsedCommand(command);
+      log(parsedCommand);
       const execCommand = parsedCommand[0];
       const parameter = parsedCommand[1];
       try {
         vmgitFunctions[execCommand](parameter);
       } catch (error) {
-        log(`입력한 명령어 ${execCommand}는 지원하지 않습니다.`);
+        log(error);
       }
       executePrompt(); //Calling this function again to new command
     });
