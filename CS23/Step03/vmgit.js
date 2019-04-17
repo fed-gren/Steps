@@ -1,13 +1,9 @@
 //* 가상 깃 개발
 //TODO: init part 구현
+
 module.exports = class VMGit {
   constructor() {
     this.repoList = []; //? 저장소 객체를 담을 배열
-  }
-  procCommand() {
-    //TODO: procCommand() 함수 구현
-    //? 명령어 입력받아서 명령어에 따라 각 함수들 호출하는 함수.
-    console.log("procCommand() executed!");
   }
 
   init() {

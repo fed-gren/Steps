@@ -5,3 +5,9 @@ const vmgit = new VMGit();
 const procCommandTest = () => {
   vmgit.procCommand();
 };
+
+const vmgitTest = () => {
+  procCommandTest();
+};
+
+vmgitTest();
