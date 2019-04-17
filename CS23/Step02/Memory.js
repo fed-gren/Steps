@@ -12,7 +12,7 @@ const throwTextMemError = () => {
 
 module.exports = class Memory {
   constructor() {
-    this.MEMORY = new Uint16Array(131072);
+    this.MEMORY = new Uint16Array(memMetaData.END_HEAP_ADDR);
     this.programCouter = -1;
   }
 
@@ -77,5 +77,4 @@ module.exports = class Memory {
       throwRangeError(memMetaData.START_TEXT_ADDR, memMetaData.END_TEXT_ADDR);
     }
   }
-}
-
+};
