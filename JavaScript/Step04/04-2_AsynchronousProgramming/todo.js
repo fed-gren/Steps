@@ -125,12 +125,12 @@ module.exports = class TodoList {
   }
 
   deleteData(id) {
-    if (id === undefined) {
+    const numId = parseInt(id);
+    if (!Number.isFinite(numId)) {
       log(`delete 명령어의 인자가 잘못 되었습니다.`);
       return;
     }
     let deletingObj;
-    const numId = parseInt(id);
 
     todos.forEach((element, index) => {
       if (element.id === numId) {
@@ -150,12 +150,13 @@ module.exports = class TodoList {
   updateData(id, status) {
     const statusReg = /^todo$|^doing$|^done$/;
     const matchResult = `${status}`.match(statusReg);
-    if (id === undefined || matchResult === null) {
+    const numId = parseInt(id);
+    if (!Number.isFinite(numId) || matchResult === null) {
       log(`update 명령어의 인자가 잘못 되었습니다.`);
       return;
     }
     let name;
-    const numId = parseInt(id);
+
     todos.forEach(element => {
       if (element.id === numId) {
         element.status = status;
