@@ -86,14 +86,18 @@ module.exports = class TodoList {
   }
 
   showData(status) {
-    if (status === "all") {
+    const statusReg = /^all$|^todo$|^doing$|^done$/;
+    const matchResult = `${status}`.match(statusReg);
+    if (matchResult === null) {
+      log(`show 명령어의 인자가 잘못 되었습니다.`);
+      return;
+    }
+    if (matchResult[0] === "all") {
       const countObj = this.count();
       this.printAll(countObj);
-    } else if (status === "todo" || status === "doing" || status === "done") {
+    } else {
       const namesArr = this.getNames(status);
       this.printList(namesArr, status);
-    } else {
-      log("show의 인자는 todo, doing, done, all 만 가능합니다!");
     }
   }
 
