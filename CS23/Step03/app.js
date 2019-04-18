@@ -4,7 +4,7 @@ const VMGit = require("./vmgit");
 const vmgit = new VMGit();
 
 const app = () => {
-  const promptStr = "/> ";
+  let promptStr = "/> ";
   const vmgitFunctions = {
     init: vmgit.init,
     status: vmgit.status,
@@ -34,7 +34,16 @@ const app = () => {
       parsedCommand.shift();
       const parameters = [...parsedCommand];
       try {
-        vmgitFunctions[execCommand](...parameters);
+        const execResult = vmgitFunctions[execCommand](...parameters);
+        if (execCommand === "checkout") {
+          if (execResult !== undefined) {
+            promptStr = "/> ";
+            promptStr = execResult + promptStr;
+          } else {
+            promptStr = "/> ";
+          }
+          rl.setPrompt(promptStr);
+        }
       } catch (error) {
         log(error);
       }

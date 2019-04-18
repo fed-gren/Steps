@@ -59,13 +59,18 @@ module.exports = class VMGit {
     }
   }
 
-  checkout() {
+  checkout(repoName) {
     //TODO: init - checkout 명령어 구현
     //? 이동할 저장소 명 입력받아서 해당 저장소가 있으면 이동한다.
     //* searchRepo를 재사용해서 검색한다.
     //* 저장소 객체를 return 받으면 name을 뽑아서 prompt 문자열에 붙여준다!
     //* 저장소 없는 경우 다른 행동은 하지 않는다.
-    console.log("checkout() executed!");
+    const repoObj = searchRepo(repoName);
+    if (repoObj[0] !== undefined) {
+      return repoObj[0].name;
+    } else {
+      return "";
+    }
   }
 
   printRepoList() {
