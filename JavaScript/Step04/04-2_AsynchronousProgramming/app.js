@@ -21,7 +21,7 @@ const executeCommand = commandArray => {
   const action = commandArray[0];
   commandArray.shift();
   const commandParameters = commandArray;
-  const actionReg = /show|add|delete|update/;
+  const actionReg = /^show$|^add$|^delete$|^update$/;
   let actionMatchResult = action.match(actionReg);
   try {
     myTodoList[`${actionMatchResult[0]}Data`](...commandParameters);
