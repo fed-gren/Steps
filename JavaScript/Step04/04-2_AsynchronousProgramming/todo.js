@@ -98,6 +98,10 @@ module.exports = class TodoList {
   }
 
   addData(name, tags) {
+    if (name === undefined) {
+      log(`add 명령어의 인자가 잘못 되었습니다.`);
+      return;
+    }
     let id;
     while (true) {
       id = Math.floor(Math.random() * 10000) + 1;
@@ -121,6 +125,10 @@ module.exports = class TodoList {
   }
 
   deleteData(id) {
+    if (id === undefined) {
+      log(`delete 명령어의 인자가 잘못 되었습니다.`);
+      return;
+    }
     let deletingObj;
     const numId = parseInt(id);
 
@@ -140,6 +148,12 @@ module.exports = class TodoList {
   }
 
   updateData(id, status) {
+    const statusReg = /^todo$|^doing$|^done$/;
+    const matchResult = `${status}`.match(statusReg);
+    if (id === undefined || matchResult === null) {
+      log(`update 명령어의 인자가 잘못 되었습니다.`);
+      return;
+    }
     let name;
     const numId = parseInt(id);
     todos.forEach(element => {
