@@ -4,6 +4,7 @@ const VMGit = require("./vmgit");
 const vmgit = new VMGit();
 
 const app = () => {
+  const promptStr = "/> ";
   const vmgitFunctions = {
     init: vmgit.init,
     status: vmgit.status,
@@ -21,7 +22,9 @@ const app = () => {
   };
 
   const executePrompt = () => {
-    rl.question("/> ", function(command) {
+    rl.setPrompt(promptStr);
+    rl.prompt();
+    rl.on("line", function(command) {
       if (command === "quit") {
         log("vmgit을 종료합니다.");
         return rl.close();
@@ -35,7 +38,9 @@ const app = () => {
       } catch (error) {
         log(error);
       }
-      executePrompt(); //Calling this function again to new command
+      rl.prompt();
+    }).on("close", function() {
+      process.exit();
     });
   };
 
