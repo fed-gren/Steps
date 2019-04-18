@@ -33,6 +33,11 @@ module.exports = class VMGit {
     //TODO: init - init() 함수 구현
     //? 생성할 저장소 명을 입력받아 저장소 객체 생성해서 전체 저장소 배열에 추가한다.
     //* 객체 구조 -> name(저장소명), id, updated(최종 갱신 날짜), fileList(저장소 내 파일리스트)
+    const searchedRepo = searchRepo(repoName);
+    if (searchedRepo.length > 0) {
+      log(`동일한 저장소명(${repoName})이(가) 존재합니다.`);
+      return;
+    }
     const repoId = generateRandomID();
     const currentDate = formatDate(new Date(Date.now()));
     const repoObj = {
