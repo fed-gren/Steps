@@ -23,6 +23,10 @@ const executeCommand = commandArray => {
   const commandParameters = commandArray;
   const actionReg = /^show$|^add$|^delete$|^update$/;
   let actionMatchResult = action.match(actionReg);
+  if (actionMatchResult === null) {
+    log(`명령어가 잘못되었습니다.`);
+    return;
+  }
   try {
     myTodoList[`${actionMatchResult[0]}Data`](...commandParameters);
   } catch (error) {
