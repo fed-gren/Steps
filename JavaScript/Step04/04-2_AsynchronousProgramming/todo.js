@@ -51,6 +51,8 @@ const getRandomId = maxIdNumber => {
   return id;
 };
 
+const getMatchResult = (string, regExp) => string.match(regExp);
+
 module.exports = class TodoList {
   count() {
     const countObj = {
@@ -92,7 +94,7 @@ module.exports = class TodoList {
 
   showData(status) {
     const statusReg = /^all$|^todo$|^doing$|^done$/;
-    const matchResult = `${status}`.match(statusReg);
+    const matchResult = getMatchResult(`${status}`, statusReg);
     if (matchResult === null) {
       log(`show 명령어의 인자가 잘못 되었습니다.`);
       return;
@@ -108,9 +110,9 @@ module.exports = class TodoList {
 
   addData(name, tags) {
     const nameReg = /^\s+$/; //스페이스로 시작해서 스페이스로 끝나는 경우
-    const nameMatchResult = `${name}`.match(nameReg);
     const tagsReg = /^\[\"\S+\"\]$/;
-    const tagsMatchResult = `${tags}`.match(tagsReg);
+    const nameMatchResult = getMatchResult(`${name}`, nameReg);
+    const tagsMatchResult = getMatchResult(`${tags}`, tagsReg);
 
     if (nameMatchResult !== null || name === "") {
       log(`add 명령어의 인자 name이 잘못 되었습니다.`);
@@ -161,7 +163,7 @@ module.exports = class TodoList {
 
   updateData(id, status) {
     const statusReg = /^todo$|^doing$|^done$/;
-    const matchResult = `${status}`.match(statusReg);
+    const matchResult = getMatchResult(`${status}`, statusReg);
     const numId = parseInt(id);
     if (!Number.isFinite(numId) || matchResult === null) {
       log(`update 명령어의 인자가 잘못 되었습니다.`);
