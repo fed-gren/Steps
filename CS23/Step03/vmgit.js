@@ -39,6 +39,12 @@ const printRepoList = () => {
   log(repoListStr);
 };
 
+const allRepoUnselect = () => {
+  //? checkout 시, 하나의 저장소만 선택, 혹은 전부 선택되지 않게 하기 위해 전체 저장소의 isSelected 속성을 false로 만드는 함수
+  //* repoList 배열을 모두 순회하며 객체 내 isSelected 속성을 false로 만든다.
+  repoList.forEach(repo => (repo.isSelected = false));
+};
+
 module.exports = class VMGit {
   init(repoName) {
     //? 생성할 저장소 명을 입력받아 저장소 객체 생성해서 전체 저장소 배열에 추가한다.
@@ -55,7 +61,7 @@ module.exports = class VMGit {
       id: repoId,
       updated: currentDate,
       files: [],
-      isSeleted: false
+      isSelected: false
     };
     repoList.push(repoObj);
   }
@@ -84,6 +90,7 @@ module.exports = class VMGit {
     //* 저장소 객체를 return 받으면 name을 뽑아서 prompt 문자열에 붙여준다!
     //* 저장소 없는 경우 다른 행동은 하지 않는다.
     const repoObj = searchRepo(repoName);
+    allRepoUnselect();
     if (repoObj[0] !== undefined) {
       repoObj[0].isSelected = true;
       return repoObj[0].name;
