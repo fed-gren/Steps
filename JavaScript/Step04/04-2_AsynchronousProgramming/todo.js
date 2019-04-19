@@ -83,7 +83,7 @@ module.exports = class TodoList {
 
   printList(namesArr, status) {
     let resultStr = `${status} 리스트 : 총 ${namesArr.length}건 : `;
-    namesArr.forEach(function(element, index) {
+    namesArr.forEach((element, index) => {
       resultStr += `'${element}'`;
       if (index < namesArr.length - 1) {
         resultStr += `, `;
