@@ -25,10 +25,11 @@ const app = () => {
         return rl.close();
       }
       const parsedCommand = getParsedCommand(command);
-      const execCommand = parsedCommand[0];
+      let execCommand = parsedCommand[0];
       parsedCommand.shift();
       const parameters = [...parsedCommand];
       try {
+        if (execCommand === "new") execCommand += "File";
         const execResult = vmgit[execCommand](...parameters);
         if (execCommand === "checkout") {
           if (execResult !== undefined) {
