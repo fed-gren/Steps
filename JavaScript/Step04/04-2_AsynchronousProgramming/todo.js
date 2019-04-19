@@ -82,13 +82,11 @@ module.exports = class TodoList {
   }
 
   printList(namesArr, status) {
-    let resultStr = `${status} 리스트 : 총 ${namesArr.length}건 : `;
-    namesArr.forEach((element, index) => {
-      resultStr += `'${element}'`;
-      if (index < namesArr.length - 1) {
-        resultStr += `, `;
-      }
-    });
+    const baseStr = `${status} 리스트 : 총 ${namesArr.length}건 : `;
+    const resultStr = namesArr.reduce((accumulator, currentName) => {
+      if (accumulator === baseStr) return accumulator + currentName;
+      else return accumulator + ", " + currentName;
+    }, baseStr);
     log(resultStr);
   }
 
