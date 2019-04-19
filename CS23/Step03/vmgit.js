@@ -27,10 +27,8 @@ const searchRepo = repoName => {
 };
 
 const printRepoList = () => {
-  //TODO: status - printRepoList()
   //? searchRepo()에서 false 반환한 경우, 전체 저장소 목록(name)을 출력하는 함수.
   //* 배열 순회하며 객체 내 이름만으로 구성된 새로운 배열 필요! map과 forEach 사용하면 될듯
-  // const repoNameArr = repoList.map(repoObj => repoObj.name);
   const baseRepoListStr = "저장소 목록 : ";
   const repoListStr = repoList
     .map(repoObj => repoObj.name)
