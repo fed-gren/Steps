@@ -58,7 +58,6 @@ module.exports = class VMGit {
       isSeleted: false
     };
     repoList.push(repoObj);
-    log(repoList);
   }
 
   status(repoLocation, repoName) {
@@ -91,5 +90,9 @@ module.exports = class VMGit {
     } else {
       return "";
     }
+  }
+
+  printRepoList() {
+    log(repoList);
   }
 };
