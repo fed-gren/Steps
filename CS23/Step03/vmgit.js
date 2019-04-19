@@ -54,7 +54,8 @@ module.exports = class VMGit {
       name: repoName,
       id: repoId,
       updated: currentDate,
-      files: []
+      files: [],
+      isSeleted: false
     };
     repoList.push(repoObj);
     log(repoList);
@@ -85,6 +86,7 @@ module.exports = class VMGit {
     //* 저장소 없는 경우 다른 행동은 하지 않는다.
     const repoObj = searchRepo(repoName);
     if (repoObj[0] !== undefined) {
+      repoObj[0].isSelected = true;
       return repoObj[0].name;
     } else {
       return "";
