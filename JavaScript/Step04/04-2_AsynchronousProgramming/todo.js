@@ -38,15 +38,15 @@ const todos = [
   }
 ];
 
-const ids = [423, 1535, 9999, 512, 2, 77];
+const MAX_ID_NUMBER = 10000;
 
-const getRandomId = () => {
+const getRandomId = maxIdNumber => {
   let id;
+  let loopCount = 0;
   while (true) {
-    id = Math.floor(Math.random() * 10000) + 1;
-    if (ids.indexOf(id) === -1) {
-      break;
-    }
+    id = Math.floor(Math.random() * maxIdNumber) + 1;
+    if (todos.filter(element => element.id === id).length === 0) break;
+    if (++loopCount > MAX_ID_NUMBER) throw Error("할일 목록이 가득 찼습니다.");
   }
   return id;
 };
@@ -123,7 +123,7 @@ module.exports = class TodoList {
       return;
     }
 
-    const id = getRandomId();
+    const id = getRandomId(MAX_ID_NUMBER);
 
     const todoObj = {
       name: name,
