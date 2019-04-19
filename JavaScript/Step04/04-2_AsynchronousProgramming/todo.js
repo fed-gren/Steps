@@ -38,6 +38,14 @@ const todos = [
   }
 ];
 
+const MSG = {
+  SHOW_PARAM_ERR: `show 명령어의 인자가 잘못 되었습니다.`,
+  ADD_PARAM_NAME_ERR: `add 명령어의 인자 name이 잘못 되었습니다.`,
+  ADD_PARAM_TAG_ERR: `add 명령어의 인자 tag형태가 잘못 되었습니다. example: ["tagname"]`,
+  DELETE_PARAM_ERR: `delete 명령어의 인자가 잘못 되었습니다.`,
+  UPDATE_PARAM_ERR: `update 명령어의 인자가 잘못 되었습니다.`
+};
+
 const MAX_ID_NUMBER = 10000;
 
 const getRandomId = maxIdNumber => {
@@ -96,7 +104,7 @@ module.exports = class TodoList {
     const statusReg = /^all$|^todo$|^doing$|^done$/;
     const matchResult = getMatchResult(`${status}`, statusReg);
     if (matchResult === null) {
-      log(`show 명령어의 인자가 잘못 되었습니다.`);
+      log(MSG.SHOW_PARAM_ERR);
       return;
     }
     if (matchResult[0] === "all") {
@@ -115,11 +123,11 @@ module.exports = class TodoList {
     const tagsMatchResult = getMatchResult(`${tags}`, tagsReg);
 
     if (nameMatchResult !== null || name === "") {
-      log(`add 명령어의 인자 name이 잘못 되었습니다.`);
+      log(MSG.ADD_PARAM_NAME_ERR);
       return;
     }
     if (tagsMatchResult === null) {
-      log(`add 명령어의 인자 tag형태가 잘못 되었습니다. example: ["tagname"]`);
+      log(MSG.ADD_PARAM_TAG_ERR);
       return;
     }
 
@@ -141,7 +149,7 @@ module.exports = class TodoList {
   deleteData(id) {
     const numId = parseInt(id);
     if (!Number.isFinite(numId)) {
-      log(`delete 명령어의 인자가 잘못 되었습니다.`);
+      log(MSG.DELETE_PARAM_ERR);
       return;
     }
     let deletingObj;
@@ -166,7 +174,7 @@ module.exports = class TodoList {
     const matchResult = getMatchResult(`${status}`, statusReg);
     const numId = parseInt(id);
     if (!Number.isFinite(numId) || matchResult === null) {
-      log(`update 명령어의 인자가 잘못 되었습니다.`);
+      log(MSG.UPDATE_PARAM_ERR);
       return;
     }
     let name;
