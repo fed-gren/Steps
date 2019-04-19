@@ -113,8 +113,17 @@ module.exports = class TodoList {
   }
 
   addData(name, tags) {
-    if (name === undefined) {
-      log(`add 명령어의 인자가 잘못 되었습니다.`);
+    const nameReg = /^\s+$/; //스페이스로 시작해서 스페이스로 끝나는 경우
+    const nameMatchResult = `${name}`.match(nameReg);
+    const tagsReg = /^\[\"\S+\"\]$/;
+    const tagsMatchResult = `${tags}`.match(tagsReg);
+
+    if (nameMatchResult !== null || name === "") {
+      log(`add 명령어의 인자 name이 잘못 되었습니다.`);
+      return;
+    }
+    if (tagsMatchResult === null) {
+      log(`add 명령어의 인자 tag형태가 잘못 되었습니다. example: ["tagname"]`);
       return;
     }
 
