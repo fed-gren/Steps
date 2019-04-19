@@ -76,12 +76,8 @@ module.exports = class TodoList {
 
   getNames(status) {
     const namesArr = todos
-      .filter(function(element) {
-        return status === element.status;
-      })
-      .map(function(element) {
-        return element.name;
-      });
+      .filter(element => status === element.status)
+      .map(element => element.name);
     return namesArr;
   }
 
