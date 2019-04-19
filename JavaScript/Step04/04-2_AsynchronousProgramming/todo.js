@@ -152,14 +152,18 @@ module.exports = class TodoList {
       log(MSG.DELETE_PARAM_ERR);
       return;
     }
-    let deletingObj;
+    let indexOfDeletingObj;
 
-    todos.forEach((element, index) => {
-      if (element.id === numId) {
-        deletingObj = element;
-        todos.splice(index, 1);
-      }
-    });
+    const deletingObj = todos.filter((element, index) => {
+      indexOfDeletingObj = index;
+      return element.id === numId;
+    })[0];
+
+    if (deletingObj === undefined) {
+      log(MSG.DELETE_PARAM_ERR);
+      return;
+    }
+    todos.splice(indexOfDeletingObj, 1);
 
     log(
       `${deletingObj.name}이(가) ${deletingObj.status} 목록에서 삭제됐습니다.`
