@@ -5,11 +5,6 @@ const vmgit = new VMGit();
 
 const app = () => {
   let promptStr = "/> ";
-  const vmgitFunctions = {
-    init: vmgit.init,
-    status: vmgit.status,
-    checkout: vmgit.checkout
-  };
   const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout
@@ -34,7 +29,7 @@ const app = () => {
       parsedCommand.shift();
       const parameters = [...parsedCommand];
       try {
-        const execResult = vmgitFunctions[execCommand](...parameters);
+        const execResult = vmgit[execCommand](...parameters);
         if (execCommand === "checkout") {
           if (execResult !== undefined) {
             promptStr = "/> ";
