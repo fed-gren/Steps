@@ -71,7 +71,9 @@ module.exports = class VMGit {
       name: repoName,
       id: repoId,
       updated: currentDate,
-      files: [],
+      workingDirectory: [],
+      stagingArea: [],
+      gitRepository: [],
       isSelected: false
     };
     repoList.push(repoObj);
@@ -124,6 +126,6 @@ module.exports = class VMGit {
       status: FILE_STATUS.Untracked,
       updated: formatDate(new Date(Date.now()))
     };
-    getSelectedRepo().files.push(fileObj);
+    getSelectedRepo().workingDirectory.push(fileObj);
   }
 };
