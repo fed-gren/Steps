@@ -2,6 +2,12 @@
 const { log } = console;
 const idList = [];
 const repoList = []; //? 저장소 객체를 담을 배열
+const FILE_STATUS = {
+  Untracked: "Untracked",
+  Modified: "Modified",
+  Unmodified: "Unmodified",
+  Staged: "Staged"
+};
 
 const generateRandomID = () => {
   let id;
@@ -43,6 +49,11 @@ const allRepoUnselect = () => {
   //? checkout 시, 하나의 저장소만 선택, 혹은 전부 선택되지 않게 하기 위해 전체 저장소의 isSelected 속성을 false로 만드는 함수
   //* repoList 배열을 모두 순회하며 객체 내 isSelected 속성을 false로 만든다.
   repoList.forEach(repo => (repo.isSelected = false));
+};
+
+const getSelectedRepo = () => {
+  //? checkout 명령어로 선택된 저장소 객체
+  return repoList.filter(repo => repo.isSelected === true)[0];
 };
 
 module.exports = class VMGit {
@@ -101,5 +112,18 @@ module.exports = class VMGit {
 
   printRepoList() {
     log(repoList);
+  }
+
+  newFile(fileName) {
+    //TODO: checkout으로 저장소 선택한 후에 new <file_name> 명령을 사용하면 해당 working directory에 파일을 생성한 것으로 기록한다. 처음 생성한 파일 상태는 Untracked 상태
+    //? 현재 선택되어 있는 저장소에 파일을 추가한다.
+    //* 파일 객체 생성해서 현재 선택된 저장소 객체 내 프로퍼티로 추가한다.
+    //* 파일 객체에 상태가 있어야 한다. Untracked, Unmodified, Modified, Staged
+    const fileObj = {
+      name: fileName,
+      status: FILE_STATUS.Untracked,
+      updated: formatDate(new Date(Date.now()))
+    };
+    getSelectedRepo().files.push(fileObj);
   }
 };
