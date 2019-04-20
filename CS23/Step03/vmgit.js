@@ -56,6 +56,25 @@ const getSelectedRepo = () => {
   return repoList.filter(repo => repo.isSelected === true)[0];
 };
 
+const printRepoFiles = repo => {
+  //? 인자로 받은 저장소의 파일들을 각 영역을 구분지어 출력한다.
+  let repoFileListStr = "";
+  repoFileListStr += "---Working Directory/\n";
+
+  repoFileListStr = repo.files.workingDirectory.reduce((acc, file) => {
+    return acc + `${file.name}\t${file.updated}\n`;
+  }, repoFileListStr);
+  repoFileListStr += "\n---Staging Area/\n";
+  repoFileListStr = repo.files.stagingArea.reduce((acc, file) => {
+    return acc + `${file.name}\t${file.updated}\n`;
+  }, repoFileListStr);
+  repoFileListStr += "\n---Git Repository/\n";
+  repoFileListStr = repo.files.gitRepository.reduce((acc, file) => {
+    return acc + `${file.name}\t${file.updated}\n`;
+  }, repoFileListStr);
+  log(repoFileListStr);
+};
+
 module.exports = class VMGit {
   init(repoName) {
     //? 생성할 저장소 명을 입력받아 저장소 객체 생성해서 전체 저장소 배열에 추가한다.
@@ -87,7 +106,9 @@ module.exports = class VMGit {
     //* 전체 저장소 목록 출력하는 함수가 필요함.
     //* 전체 저장소 순회하면서 저장소 찾는 함수 따로 구현하기.
     if (!!!repoLocation || !!!repoName) {
-      printRepoList();
+      const selectedRepo = getSelectedRepo();
+      if (selectedRepo === undefined) printRepoList();
+      else printRepoFiles(selectedRepo);
       return;
     }
     if (repoLocation === "local") {
