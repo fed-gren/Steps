@@ -149,11 +149,18 @@ module.exports = class VMGit {
     //? 현재 선택되어 있는 저장소에 파일을 추가한다.
     //* 파일 객체 생성해서 현재 선택된 저장소 객체 내 프로퍼티로 추가한다.
     //* 파일 객체에 상태가 있어야 한다. Untracked, Unmodified, Modified, Staged
-    const fileObj = {
-      name: fileName,
-      status: FILE_STATUS.Untracked,
-      updated: formatDate(new Date(Date.now()))
-    };
-    getSelectedRepo().files.workingDirectory.push(fileObj);
+    const selectedRepo = getSelectedRepo();
+    if (selectedRepo === undefined) {
+      log(
+        `현재 선택된 저장소가 없습니다. 저장소 선택 후 파일 생성 명령어를 입력하세요.\n저장소 선택 : checkout <repo name>`
+      );
+    } else {
+      const fileObj = {
+        name: fileName,
+        status: FILE_STATUS.Untracked,
+        updated: formatDate(new Date(Date.now()))
+      };
+      selectedRepo.files.workingDirectory.push(fileObj);
+    }
   }
 };
