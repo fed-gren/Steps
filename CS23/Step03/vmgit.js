@@ -23,7 +23,7 @@ const generateRandomID = () => {
 
 const formatDate = date => {
   return `${date.getFullYear()}-${date.getMonth() +
-    1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+    1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 };
 
 const searchRepo = repoName => {
