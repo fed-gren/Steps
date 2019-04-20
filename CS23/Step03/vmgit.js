@@ -87,7 +87,7 @@ module.exports = class VMGit {
     //* 전체 저장소 목록 출력하는 함수가 필요함.
     //* 전체 저장소 순회하면서 저장소 찾는 함수 따로 구현하기.
     if (!!!repoLocation || !!!repoName) {
-      log("명령어 형식이 잘못 되었습니다.");
+      printRepoList();
       return;
     }
     if (repoLocation === "local") {
