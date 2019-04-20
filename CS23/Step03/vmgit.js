@@ -107,8 +107,12 @@ module.exports = class VMGit {
     //* 전체 저장소 순회하면서 저장소 찾는 함수 따로 구현하기.
     if (!!!repoLocation || !!!repoName) {
       const selectedRepo = getSelectedRepo();
-      if (selectedRepo === undefined) printRepoList();
-      else printRepoFiles(selectedRepo);
+      if (selectedRepo === undefined) {
+        printRepoList();
+        log(
+          "warning : 'status local <repo name>'를 입력하거나 'checkout <repo name>'로 저장소를 선택한 후에 'status' 명령어를 입력하세요."
+        );
+      } else printRepoFiles(selectedRepo);
       return;
     }
     if (repoLocation === "local") {
@@ -116,7 +120,7 @@ module.exports = class VMGit {
       if (localRepo === undefined) {
         printRepoList();
       } else {
-        log(localRepo.files);
+        printRepoFiles(localRepo);
       }
     }
   }
