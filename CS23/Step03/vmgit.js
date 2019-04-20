@@ -133,6 +133,7 @@ module.exports = class VMGit {
       const localRepo = searchRepo(repoName)[0];
       if (localRepo === undefined) {
         printRepoList();
+        log(`저장소 <${repoName}>은(는) 존재하지 않습니다.`);
       } else {
         printRepoFiles(localRepo);
       }
