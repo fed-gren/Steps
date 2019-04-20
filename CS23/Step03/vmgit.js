@@ -75,6 +75,20 @@ const printRepoFiles = repo => {
   log(repoFileListStr);
 };
 
+const checkDuplicateFile = (repo, newFileName) => {
+  //? repo 객체 내 파일 목록에 newFileName과 동일한 이름을 가진 파일이 있으면 true, 없으면 false 출력
+  let duplicateFlag = false;
+  const repoFiles = repo.files;
+  for (fileArea in repoFiles) {
+    duplicateFlag = repoFiles[fileArea].some(file => newFileName === file.name);
+    if (duplicateFlag) {
+      log("동일한 파일명이 존재합니다.");
+      break;
+    }
+  }
+  return duplicateFlag;
+};
+
 module.exports = class VMGit {
   init(repoName) {
     //? 생성할 저장소 명을 입력받아 저장소 객체 생성해서 전체 저장소 배열에 추가한다.
@@ -160,7 +174,9 @@ module.exports = class VMGit {
         status: FILE_STATUS.Untracked,
         updated: formatDate(new Date(Date.now()))
       };
-      selectedRepo.files.workingDirectory.push(fileObj);
+      if (!checkDuplicateFile(selectedRepo, fileName)) {
+        selectedRepo.files.workingDirectory.push(fileObj);
+      }
     }
   }
 };
