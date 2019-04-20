@@ -79,6 +79,7 @@ module.exports = class VMGit {
       isSelected: false
     };
     repoList.push(repoObj);
+    log(`created ${repoName} repository.`);
   }
 
   status(repoLocation, repoName) {
