@@ -109,7 +109,8 @@ module.exports = class VMGit {
         stagingArea: [],
         gitRepository: []
       },
-      isSelected: false
+      isSelected: false,
+      commitLogs: []
     };
     repoList.push(repoObj);
     log(`created ${repoName} repository.`);
@@ -204,5 +205,36 @@ module.exports = class VMGit {
         log(`저장소에 ${fileName} 파일이 존재하지 않습니다.`);
       }
     }
+  }
+
+  commit(...commitLog) {
+    //? 해당 저장소 staging area에 존재하는 파일들을 git repository로 이동 후 커밋 목록 출력
+    const selectedRepo = getSelectedRepo();
+    if (selectedRepo === undefined) {
+      log(
+        `현재 선택된 저장소가 없습니다. 저장소 선택 후 commit 명령어를 입력하세요.\n저장소 선택 : checkout <repo name>`
+      );
+      return;
+    }
+    let commitFileList = "";
+    selectedRepo.files.stagingArea
+      .map(file => {
+        file.updated = getCurrentDate();
+        return file;
+      })
+      .forEach(file => {
+        selectedRepo.files.gitRepository.push(file);
+        commitFileList += `${file.name}\t${file.updated}\n`;
+      });
+    selectedRepo.files.stagingArea = [];
+    log("---commit files/\n");
+    log(commitFileList);
+
+    const commitLogStr = `commit : "${commitLog.join(" ")}"`;
+    const commitLogObj = {
+      commitLog: commitLogStr,
+      commitFiles: commitFileList
+    };
+    selectedRepo.commitLogs.push(commitLogObj);
   }
 };
