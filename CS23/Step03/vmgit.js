@@ -75,7 +75,7 @@ const printRepoFiles = repo => {
   log(repoFileListStr);
 };
 
-const checkDuplicateFile = (repo, newFileName) => {
+const checkFileExist = (repo, newFileName) => {
   //? repo 객체 내 파일 목록에 newFileName과 동일한 이름을 가진 파일이 있으면 true, 없으면 false 출력
   let duplicateFlag = false;
   const repoFiles = repo.files;
@@ -175,7 +175,7 @@ module.exports = class VMGit {
         status: FILE_STATUS.Untracked,
         updated: formatDate(new Date(Date.now()))
       };
-      if (!checkDuplicateFile(selectedRepo, fileName)) {
+      if (!checkFileExist(selectedRepo, fileName)) {
         selectedRepo.files.workingDirectory.push(fileObj);
       }
     }
