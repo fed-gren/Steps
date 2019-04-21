@@ -238,4 +238,30 @@ module.exports = class VMGit {
     };
     selectedRepo.commitLogs.push(commitLogObj);
   }
+
+  touch(fileName) {
+    //? 커밋된 파일을 working directory로 이동하고 file status를 Modified로 수정
+    //TODO: 리팩토링 시 add 메서드와 겹치는 로직 함수화 하기(파일 영역 이동)
+    const selectedRepo = getSelectedRepo();
+    if (selectedRepo === undefined) {
+      log(
+        `현재 선택된 저장소가 없습니다. 저장소 선택 후 touch 명령어를 입력하세요.\n저장소 선택 : checkout <repo name>`
+      );
+      return;
+    }
+    if (checkFileExist(selectedRepo, fileName)) {
+      let fileIdx = -1;
+      selectedRepo.files.gitRepository.forEach((file, idx) => {
+        if (file.name === fileName) fileIdx = idx;
+      });
+      if (fileIdx === -1) return;
+      const fileObj = selectedRepo.files.gitRepository[fileIdx];
+      selectedRepo.files.gitRepository.splice(fileIdx, 1);
+      selectedRepo.files.workingDirectory.push(fileObj);
+      fileObj.updated = getCurrentDate();
+      fileObj.status = FILE_STATUS.Modified;
+    } else {
+      log(`저장소에 ${fileName} 파일이 존재하지 않습니다.`);
+    }
+  }
 };
