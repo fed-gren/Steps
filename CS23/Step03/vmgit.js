@@ -82,7 +82,6 @@ const checkFileExist = (repo, newFileName) => {
   for (fileArea in repoFiles) {
     duplicateFlag = repoFiles[fileArea].some(file => newFileName === file.name);
     if (duplicateFlag) {
-      log("동일한 파일명이 존재합니다.");
       break;
     }
   }
@@ -177,6 +176,31 @@ module.exports = class VMGit {
       };
       if (!checkFileExist(selectedRepo, fileName)) {
         selectedRepo.files.workingDirectory.push(fileObj);
+      } else {
+        log("동일한 파일명이 존재합니다.");
+      }
+    }
+  }
+
+  add(fileName) {
+    const selectedRepo = getSelectedRepo();
+    if (selectedRepo === undefined) {
+      log(
+        `현재 선택된 저장소가 없습니다. 저장소 선택 후 add 명령어를 입력하세요.\n저장소 선택 : checkout <repo name>`
+      );
+    } else {
+      if (checkFileExist(selectedRepo, fileName)) {
+        let fileIdx = -1;
+        selectedRepo.files.workingDirectory.forEach((file, idx) => {
+          if (file.name === fileName) fileIdx = idx;
+        });
+        if (fileIdx === -1) return;
+        const fileObj = selectedRepo.files.workingDirectory[fileIdx];
+        selectedRepo.files.workingDirectory.splice(fileIdx, 1);
+        selectedRepo.files.stagingArea.push(fileObj);
+        fileObj.updated = formatDate(new Date(Date.now()));
+      } else {
+        log(`저장소에 ${fileName} 파일이 존재하지 않습니다.`);
       }
     }
   }
