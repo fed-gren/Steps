@@ -1,5 +1,5 @@
 //* 가상 깃 개발
-const { log } = console;
+const printMessage = console.log;
 const idList = [];
 const repoList = []; //? 저장소 객체를 담을 배열
 const FILE_STATUS = {
@@ -43,7 +43,7 @@ const printRepoList = () => {
       if (accumulator === baseRepoListStr) return accumulator + repoName;
       else return accumulator + ", " + repoName;
     }, baseRepoListStr);
-  log(repoListStr);
+  printMessage(repoListStr);
 };
 
 const allRepoUnselect = () => {
@@ -73,7 +73,7 @@ const printRepoFiles = repo => {
   repoFileListStr = repo.files.gitRepository.reduce((acc, file) => {
     return acc + `${file.name}\t${file.updated}\n`;
   }, repoFileListStr);
-  log(repoFileListStr);
+  printMessage(repoFileListStr);
 };
 
 const checkFileExist = (repo, newFileName) => {
@@ -95,7 +95,7 @@ module.exports = class VMGit {
     //* 객체 구조 -> name(저장소명), id, updated(최종 갱신 날짜), fileList(저장소 내 파일리스트)
     const searchedRepo = searchRepo(repoName);
     if (searchedRepo.length > 0) {
-      log(`동일한 저장소명(${repoName})이(가) 존재합니다.`);
+      printMessage(`동일한 저장소명(${repoName})이(가) 존재합니다.`);
       return;
     }
     const repoId = generateRandomID();
@@ -113,7 +113,7 @@ module.exports = class VMGit {
       commitLogs: []
     };
     repoList.push(repoObj);
-    log(`created ${repoName} repository.`);
+    printMessage(`created ${repoName} repository.`);
   }
 
   status(repoLocation, repoName) {
@@ -124,7 +124,7 @@ module.exports = class VMGit {
       const selectedRepo = getSelectedRepo();
       if (selectedRepo === undefined) {
         printRepoList();
-        log(
+        printMessage(
           "warning : 'status local <repo name>'를 입력하거나 'checkout <repo name>'로 저장소를 선택한 후에 'status' 명령어를 입력하세요."
         );
       } else printRepoFiles(selectedRepo);
@@ -134,7 +134,7 @@ module.exports = class VMGit {
       const localRepo = searchRepo(repoName)[0];
       if (localRepo === undefined) {
         printRepoList();
-        log(`저장소 <${repoName}>은(는) 존재하지 않습니다.`);
+        printMessage(`저장소 <${repoName}>은(는) 존재하지 않습니다.`);
       } else {
         printRepoFiles(localRepo);
       }
@@ -157,7 +157,7 @@ module.exports = class VMGit {
   }
 
   printRepoList() {
-    log(repoList);
+    printMessage(repoList);
   }
 
   newFile(fileName) {
@@ -167,7 +167,7 @@ module.exports = class VMGit {
     //* 파일 객체에 상태가 있어야 한다. Untracked, Unmodified, Modified, Staged
     const selectedRepo = getSelectedRepo();
     if (selectedRepo === undefined) {
-      log(
+      printMessage(
         `현재 선택된 저장소가 없습니다. 저장소 선택 후 파일 생성 명령어를 입력하세요.\n저장소 선택 : checkout <repo name>`
       );
     } else {
@@ -179,7 +179,7 @@ module.exports = class VMGit {
       if (!checkFileExist(selectedRepo, fileName)) {
         selectedRepo.files.workingDirectory.push(fileObj);
       } else {
-        log("동일한 파일명이 존재합니다.");
+        printMessage("동일한 파일명이 존재합니다.");
       }
     }
   }
@@ -187,7 +187,7 @@ module.exports = class VMGit {
   add(fileName) {
     const selectedRepo = getSelectedRepo();
     if (selectedRepo === undefined) {
-      log(
+      printMessage(
         `현재 선택된 저장소가 없습니다. 저장소 선택 후 add 명령어를 입력하세요.\n저장소 선택 : checkout <repo name>`
       );
     } else {
@@ -202,7 +202,7 @@ module.exports = class VMGit {
         selectedRepo.files.stagingArea.push(fileObj);
         fileObj.updated = getCurrentDate();
       } else {
-        log(`저장소에 ${fileName} 파일이 존재하지 않습니다.`);
+        printMessage(`저장소에 ${fileName} 파일이 존재하지 않습니다.`);
       }
     }
   }
@@ -211,7 +211,7 @@ module.exports = class VMGit {
     //? 해당 저장소 staging area에 존재하는 파일들을 git repository로 이동 후 커밋 목록 출력
     const selectedRepo = getSelectedRepo();
     if (selectedRepo === undefined) {
-      log(
+      printMessage(
         `현재 선택된 저장소가 없습니다. 저장소 선택 후 commit 명령어를 입력하세요.\n저장소 선택 : checkout <repo name>`
       );
       return;
@@ -228,8 +228,8 @@ module.exports = class VMGit {
         commitFileList += `${file.name}\t${file.updated}\n`;
       });
     selectedRepo.files.stagingArea = [];
-    log("---commit files/\n");
-    log(commitFileList);
+    printMessage("---commit files/\n");
+    printMessage(commitFileList);
 
     const commitLogStr = `commit : "${commitLog.join(" ")}"`;
     const commitLogObj = {
@@ -244,7 +244,7 @@ module.exports = class VMGit {
     //TODO: 리팩토링 시 add 메서드와 겹치는 로직 함수화 하기(파일 영역 이동)
     const selectedRepo = getSelectedRepo();
     if (selectedRepo === undefined) {
-      log(
+      printMessage(
         `현재 선택된 저장소가 없습니다. 저장소 선택 후 touch 명령어를 입력하세요.\n저장소 선택 : checkout <repo name>`
       );
       return;
@@ -261,7 +261,7 @@ module.exports = class VMGit {
       fileObj.updated = getCurrentDate();
       fileObj.status = FILE_STATUS.Modified;
     } else {
-      log(`저장소에 ${fileName} 파일이 존재하지 않습니다.`);
+      printMessage(`저장소에 ${fileName} 파일이 존재하지 않습니다.`);
     }
   }
 };
