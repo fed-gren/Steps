@@ -21,7 +21,8 @@ const generateRandomID = () => {
   return id;
 };
 
-const formatDate = date => {
+const getCurrentDate = () => {
+  const date = new Date(Date.now());
   return `${date.getFullYear()}-${date.getMonth() +
     1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
 };
@@ -98,7 +99,7 @@ module.exports = class VMGit {
       return;
     }
     const repoId = generateRandomID();
-    const currentDate = formatDate(new Date(Date.now()));
+    const currentDate = getCurrentDate();
     const repoObj = {
       name: repoName,
       id: repoId,
@@ -172,7 +173,7 @@ module.exports = class VMGit {
       const fileObj = {
         name: fileName,
         status: FILE_STATUS.Untracked,
-        updated: formatDate(new Date(Date.now()))
+        updated: getCurrentDate()
       };
       if (!checkFileExist(selectedRepo, fileName)) {
         selectedRepo.files.workingDirectory.push(fileObj);
@@ -198,7 +199,7 @@ module.exports = class VMGit {
         const fileObj = selectedRepo.files.workingDirectory[fileIdx];
         selectedRepo.files.workingDirectory.splice(fileIdx, 1);
         selectedRepo.files.stagingArea.push(fileObj);
-        fileObj.updated = formatDate(new Date(Date.now()));
+        fileObj.updated = getCurrentDate();
       } else {
         log(`저장소에 ${fileName} 파일이 존재하지 않습니다.`);
       }
