@@ -217,16 +217,11 @@ module.exports = class VMGit {
       return;
     }
     let commitFileList = "";
-    selectedRepo.files.stagingArea
-      .map(file => {
-        file.updated = getCurrentDate();
-        return file;
-      })
-      .forEach(file => {
-        file.status = FILE_STATUS.Unmodified;
-        selectedRepo.files.gitRepository.push(file);
-        commitFileList += `${file.name}\t${file.updated}\n`;
-      });
+    selectedRepo.files.stagingArea.forEach(file => {
+      file.status = FILE_STATUS.Unmodified;
+      selectedRepo.files.gitRepository.push(file);
+      commitFileList += `${file.name}\t${file.updated}\n`;
+    });
     selectedRepo.files.stagingArea = [];
     printMessage("---commit files/\n");
     printMessage(commitFileList);
