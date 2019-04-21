@@ -223,6 +223,7 @@ module.exports = class VMGit {
         return file;
       })
       .forEach(file => {
+        file.status = FILE_STATUS.Unmodified;
         selectedRepo.files.gitRepository.push(file);
         commitFileList += `${file.name}\t${file.updated}\n`;
       });
