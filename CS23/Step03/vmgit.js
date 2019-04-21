@@ -63,15 +63,15 @@ const printRepoFiles = repo => {
   repoFileListStr += "---Working Directory/\n";
 
   repoFileListStr = repo.files.workingDirectory.reduce((acc, file) => {
-    return acc + `${file.name}\t${file.updated}\n`;
+    return acc + `${file.name}\t${file.updatedTime}\n`;
   }, repoFileListStr);
   repoFileListStr += "\n---Staging Area/\n";
   repoFileListStr = repo.files.stagingArea.reduce((acc, file) => {
-    return acc + `${file.name}\t${file.updated}\n`;
+    return acc + `${file.name}\t${file.updatedTime}\n`;
   }, repoFileListStr);
   repoFileListStr += "\n---Git Repository/\n";
   repoFileListStr = repo.files.gitRepository.reduce((acc, file) => {
-    return acc + `${file.name}\t${file.updated}\n`;
+    return acc + `${file.name}\t${file.updatedTime}\n`;
   }, repoFileListStr);
   printMessage(repoFileListStr);
 };
@@ -92,7 +92,7 @@ const checkFileExist = (repo, newFileName) => {
 module.exports = class VMGit {
   init(repoName) {
     //? 생성할 저장소 명을 입력받아 저장소 객체 생성해서 전체 저장소 배열에 추가한다.
-    //* 객체 구조 -> name(저장소명), id, updated(최종 갱신 날짜), fileList(저장소 내 파일리스트)
+    //* 객체 구조 -> name(저장소명), id, fileList(저장소 내 파일리스트)
     const searchedRepo = searchRepo(repoName);
     if (searchedRepo.length > 0) {
       printMessage(`동일한 저장소명(${repoName})이(가) 존재합니다.`);
@@ -103,7 +103,6 @@ module.exports = class VMGit {
     const repoObj = {
       name: repoName,
       id: repoId,
-      updated: currentDate,
       files: {
         workingDirectory: [],
         stagingArea: [],
@@ -174,7 +173,7 @@ module.exports = class VMGit {
       const fileObj = {
         name: fileName,
         status: FILE_STATUS.Untracked,
-        updated: getCurrentDate()
+        updatedTime: getCurrentDate()
       };
       if (!checkFileExist(selectedRepo, fileName)) {
         selectedRepo.files.workingDirectory.push(fileObj);
@@ -200,7 +199,7 @@ module.exports = class VMGit {
         const fileObj = selectedRepo.files.workingDirectory[fileIdx];
         selectedRepo.files.workingDirectory.splice(fileIdx, 1);
         selectedRepo.files.stagingArea.push(fileObj);
-        fileObj.updated = getCurrentDate();
+        fileObj.updatedTime = getCurrentDate();
       } else {
         printMessage(`저장소에 ${fileName} 파일이 존재하지 않습니다.`);
       }
@@ -220,7 +219,7 @@ module.exports = class VMGit {
     selectedRepo.files.stagingArea.forEach(file => {
       file.status = FILE_STATUS.Unmodified;
       selectedRepo.files.gitRepository.push(file);
-      commitFileList += `${file.name}\t${file.updated}\n`;
+      commitFileList += `${file.name}\t${file.updatedTime}\n`;
     });
     selectedRepo.files.stagingArea = [];
     printMessage("---commit files/\n");
@@ -253,7 +252,7 @@ module.exports = class VMGit {
       const fileObj = selectedRepo.files.gitRepository[fileIdx];
       selectedRepo.files.gitRepository.splice(fileIdx, 1);
       selectedRepo.files.workingDirectory.push(fileObj);
-      fileObj.updated = getCurrentDate();
+      fileObj.updatedTime = getCurrentDate();
       fileObj.status = FILE_STATUS.Modified;
     } else {
       printMessage(`저장소에 ${fileName} 파일이 존재하지 않습니다.`);
