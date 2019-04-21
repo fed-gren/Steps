@@ -264,4 +264,21 @@ module.exports = class VMGit {
       printMessage(`저장소에 ${fileName} 파일이 존재하지 않습니다.`);
     }
   }
+
+  log() {
+    //? 커밋로그와 함께 커밋한 파일들 목록 출력
+    const selectedRepo = getSelectedRepo();
+    if (selectedRepo === undefined) {
+      printMessage(
+        `현재 선택된 저장소가 없습니다. 저장소 선택 후 log 명령어를 입력하세요.\n저장소 선택 : checkout <repo name>`
+      );
+      return;
+    }
+
+    let commitLogStr = "";
+    commitLogStr = selectedRepo.commitLogs.reduce((acc, commitLogObj) => {
+      return acc + `${commitLogObj.commitLog}\n${commitLogObj.commitFiles}\n`;
+    }, commitLogStr);
+    printMessage(commitLogStr);
+  }
 };
