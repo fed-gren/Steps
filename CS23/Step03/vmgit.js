@@ -2,6 +2,7 @@
 const printMessage = console.log;
 const idList = [];
 const repoList = []; //? 저장소 객체를 담을 배열
+const remoteRepoList = []; //? remote 저장소 객체 담을 배열
 const FILE_STATUS = {
   Untracked: "Untracked",
   Modified: "Modified",
@@ -87,6 +88,11 @@ const checkFileExist = (repo, newFileName) => {
     }
   }
   return duplicateFlag;
+};
+
+const getRepoOnRemote = repoName => {
+  //? repoName과 동일한 저장소명을 가진 저장소가 remote에 있는지 확인해서 있으면 해당 저장소 객체를 반환
+  return remoteRepoList.filter(remoteRepo => remoteRepo.name === repoName)[0];
 };
 
 module.exports = class VMGit {
@@ -215,15 +221,17 @@ module.exports = class VMGit {
       );
       return;
     }
-    let commitFileList = "";
+    const commitFileList = [];
     selectedRepo.files.stagingArea.forEach(file => {
       file.status = FILE_STATUS.Unmodified;
       selectedRepo.files.gitRepository.push(file);
-      commitFileList += `${file.name}\t${file.updatedTime}\n`;
+      commitFileList.push(file);
     });
     selectedRepo.files.stagingArea = [];
-    printMessage("---commit files/\n");
-    printMessage(commitFileList);
+    printMessage("---commit files/");
+    commitFileList.forEach((file) => {
+      printMessage(`${file.name}\t${file.updatedTime}`);
+    });
 
     const commitLogStr = `commit : "${commitLog.join(" ")}"`;
     const commitLogObj = {
@@ -274,5 +282,55 @@ module.exports = class VMGit {
       return acc + `${commitLogObj.commitLog}\n${commitLogObj.commitFiles}\n`;
     }, commitLogStr);
     printMessage(commitLogStr);
+  }
+
+  push() {
+    //? 마지막까지 local에서 commit 한 이력과 Git Repository 파일을 모두 remote로 복사
+    //* selectedRepo가 있는 경우에만 진행한다.
+    //* git repository에 파일이 있을 경우만 복사한다.
+    //* 커밋한 파일들이 push되었다는 안내 메시지를 출력한다.
+    //* remote에 현재 저장소 정보가 있다면 commitLogs와 gitRepository만 업데이트한다.
+    //* remote에 현재 저장소 정보가 없다면 필요한 저장소 객체를 모두 업데이트한다.
+    const selectedRepo = getSelectedRepo();
+    if (selectedRepo === undefined) {
+      printMessage(
+        `현재 선택된 저장소가 없습니다. 저장소 선택 후 push 명령어를 입력하세요.\n저장소 선택 : checkout <repo name>`
+      );
+      return;
+    }
+    let remoteRepo = getRepoOnRemote(selectedRepo.name);
+    if (remoteRepo === undefined) {
+      const repoObj = {
+        name: selectedRepo.name,
+        id: selectedRepo.id,
+        files: {
+          gitRepository: [...selectedRepo.files.gitRepository]
+        },
+        commitLogs: [...selectedRepo.commitLogs]
+      };
+      remoteRepoList.push(repoObj);
+      remoteRepo = getRepoOnRemote(selectedRepo.name);
+    } else {
+      if (
+        selectedRepo.files.gitRepository[
+          selectedRepo.files.gitRepository.length - 1
+        ] ===
+        remoteRepo.files.gitRepository[
+          remoteRepo.files.gitRepository.length - 1
+        ]
+      ) {
+        printMessage(`Everything up-to-date`);
+        return;
+      }
+      remoteRepo.files.gitRepository = [...selectedRepo.files.gitRepository];
+      remoteRepo.commitLogs = [
+        ...remoteRepo.commitLogs,
+        ...selectedRepo.commitLogs
+      ];
+    }
+    printMessage(`push some commits...`);
+    remoteRepo.commitLogs.forEach(log => {
+      printMessage(`${log.commitLog} pushed.`);
+    });
   }
 };
