@@ -22,6 +22,13 @@ module.exports = FM = {
       console.log("저장소가 이미 존재합니다.");
       return;
     }
-    fs.mkdirSync(`${localPath}/${repoName}`);
+    const repoPath = `${localPath}/${repoName}`;
+    const workingDirPath = `${repoPath}/Working Directory`;
+    const stagingAreaPath = `${repoPath}/Staging Area`;
+    const gitRepoPath = `${repoPath}/Git Repository`;
+    fs.mkdirSync(repoPath);
+    fs.mkdirSync(workingDirPath);
+    fs.mkdirSync(stagingAreaPath);
+    fs.mkdirSync(gitRepoPath);
   }
 };
