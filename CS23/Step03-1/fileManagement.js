@@ -96,7 +96,7 @@ module.exports = FM = {
 
   makeFile(fileName) {
     fs.writeFileSync(
-      `${selectedRepoPath}/Working Directory/${fileName}.txt`,
+      `${selectedRepoPath}/Working Directory/Untracked/${fileName}.txt`,
       "init",
       "utf8"
     );
