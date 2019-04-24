@@ -6,18 +6,16 @@ const remotePath = `${__dirname}/remote`;
 //필요한 기능 : 파일 생성, 폴더 검색해서 문자열 리턴
 
 module.exports = FM = {
-  initRepo(repo) {
-    const repoStr = `\n${JSON.stringify(repo)}\n`;
-    fs.open(`${localPath}/${repo.name}.json`, "a", "666", (err, id) => {
-      if (err) {
-        console.log(`file open err`);
-        console.log(err);
-      } else {
-        fs.write(id, repoStr, null, "utf8", err => {
-          if (err) console.log(err);
-          else console.log("The repository has been created!");
-        });
-      }
+  initRepo(repoName) {
+    const repoList = fs.readdirSync(localPath);
+    let repoExsitFlag = false;
+    repoExsitFlag = repoList.some(repo => {
+      return repo === repoName;
     });
+    if (repoExsitFlag) {
+      console.log("저장소가 이미 존재합니다.");
+      return;
+    }
+    fs.mkdirSync(`${localPath}/${repoName}`);
   }
 };
