@@ -69,5 +69,18 @@ module.exports = FM = {
     gitRepoFiles.forEach(file => {
       console.log(file);
     });
+  },
+
+  checkout(repoName) {
+    //저장소 이동
+    const repoExsitFlag = checkExistRepo(repoName);
+    if (!repoExsitFlag) {
+      console.log(
+        `${repoName} 저장소가 존재하지 않습니다. 로컬 저장소 목록 : `
+      );
+      printAllLocalRepo();
+      return;
+    }
+    //set prompt string
   }
 };
