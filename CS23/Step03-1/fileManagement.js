@@ -9,9 +9,13 @@ let selectedRepoPath = null;
 
 //필요한 기능 : 파일 생성, 폴더 검색해서 문자열 리턴
 
-const checkExistRepo = repoName => {
+const checkExistRepo = (location, repoName) => {
   let repoExsitFlag = false;
-  repoList = fs.readdirSync(localPath);
+  if (location === "local") {
+    repoList = fs.readdirSync(localPath);
+  } else if (location === "remote") {
+    repoList = fs.readdirSync(remotePath);
+  }
   repoExsitFlag = repoList.some(repo => {
     return repo === repoName;
   });
@@ -27,7 +31,7 @@ const printAllLocalRepo = () => {
 
 module.exports = FM = {
   initRepo(repoName) {
-    const repoExsitFlag = checkExistRepo(repoName);
+    const repoExsitFlag = checkExistRepo("local", repoName);
     if (repoExsitFlag) {
       console.log("저장소가 이미 존재합니다.");
       return;
@@ -48,7 +52,7 @@ module.exports = FM = {
   },
 
   printLocalRepoFiles(repoName) {
-    const repoExsitFlag = checkExistRepo(repoName);
+    const repoExsitFlag = checkExistRepo("local", repoName);
     if (!repoExsitFlag) {
       console.log(
         `${repoName} 저장소가 존재하지 않습니다. 로컬 저장소 목록 : `
@@ -87,9 +91,28 @@ module.exports = FM = {
     });
   },
 
+  printRemoteRepoFiles(repoName) {
+    if (repoName === undefined) {
+      repoName = selectedRepoPath.replace(`${localPath}/`, "");
+    }
+    const repoExsitFlag = checkExistRepo("remote", repoName);
+    if (!repoExsitFlag) {
+      console.log(`${repoName} 저장소가 존재하지 않습니다.`);
+      return;
+    }
+    const repoPath = `${remotePath}/${repoName}`;
+    const gitRepoPath = `${repoPath}/Git Repository`;
+    const gitRepoFiles = fs.readdirSync(gitRepoPath);
+
+    console.log(`---Git Repository`);
+    gitRepoFiles.forEach(file => {
+      console.log(`${file}\t${fs.statSync(`${gitRepoPath}/${file}`).mtime}`);
+    });
+  },
+
   checkoutRepo(repoName) {
     //저장소 이동
-    const repoExsitFlag = checkExistRepo(repoName);
+    const repoExsitFlag = checkExistRepo("local", repoName);
     if (!repoExsitFlag) {
       console.log(
         `${repoName} 저장소가 존재하지 않습니다. 로컬 저장소 목록 : `
