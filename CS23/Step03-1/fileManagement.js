@@ -110,5 +110,43 @@ module.exports = FM = {
       "init",
       "utf8"
     );
+  },
+
+  printRepoFilesInfo() {
+    if (selectedRepoPath === null) {
+      console.log(
+        `현재 선택된 저장소가 없습니다. status local <repo name>으로 확인 가능합니다.`
+      );
+      return;
+    }
+
+    const workingDirPath = `${selectedRepoPath}/Working Directory`;
+    const untrackedPath = `${workingDirPath}/Untracked`;
+    const modifiedPath = `${workingDirPath}/Modified`;
+    const stagingAreaPath = `${selectedRepoPath}/Staging Area`;
+    const gitRepoPath = `${selectedRepoPath}/Git Repository`;
+
+    const untrackedFiles = fs.readdirSync(untrackedPath);
+    const modifiedFiles = fs.readdirSync(modifiedPath);
+    const stagingAreaFiles = fs.readdirSync(stagingAreaPath);
+    const gitRepoFiles = fs.readdirSync(gitRepoPath);
+
+    console.log(`---Working Directory`);
+    untrackedFiles.forEach(file => {
+      console.log(`${file}\t${fs.statSync(`${untrackedPath}/${file}`).mtime}`);
+    });
+    modifiedFiles.forEach(file => {
+      console.log(`${file}\t${fs.statSync(`${modifiedPath}/${file}`).mtime}`);
+    });
+    console.log(`---Staging Area`);
+    stagingAreaFiles.forEach(file => {
+      console.log(
+        `${file}\t${fs.statSync(`${stagingAreaFiles}/${file}`).mtime}`
+      );
+    });
+    console.log(`---Git Repository`);
+    gitRepoFiles.forEach(file => {
+      console.log(`${file}\t${fs.statSync(`${gitRepoFiles}/${file}`).mtime}`);
+    });
   }
 };
