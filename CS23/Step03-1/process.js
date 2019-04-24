@@ -1,11 +1,17 @@
+const fm = require("./fileManagement");
+
 const repo = {
-  name: ""
+  name: "",
+  workingDirectory: {},
+  stagingArea: {},
+  gitRepository: {}
 };
 
 const process = {
   init(repoName) {
     repo.name = repoName;
     //make repo
+    fm.initRepo(repo);
   },
 
   status(location, repoName) {
@@ -18,3 +24,5 @@ const process = {
     //local 폴더 검색. repoName과 동일한거 있으면 프롬프트 이름 바꾸기.
   }
 };
+
+process.init("repo1");
