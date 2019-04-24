@@ -3,14 +3,15 @@ const fs = require("fs");
 const localPath = `${__dirname}/local`;
 const remotePath = `${__dirname}/remote`;
 
-const repoList = fs.readdirSync(localPath);
+let repoList = fs.readdirSync(localPath);
 
-let selectedRepoPath;
+let selectedRepoPath = null;
 
 //필요한 기능 : 파일 생성, 폴더 검색해서 문자열 리턴
 
 const checkExistRepo = repoName => {
   let repoExsitFlag = false;
+  repoList = fs.readdirSync(localPath);
   repoExsitFlag = repoList.some(repo => {
     return repo === repoName;
   });
@@ -43,6 +44,7 @@ module.exports = FM = {
     fs.mkdirSync(modifiedPath);
     fs.mkdirSync(stagingAreaPath);
     fs.mkdirSync(gitRepoPath);
+    console.log("저장소 생성");
   },
 
   printLocalRepoFiles(repoName) {
@@ -99,6 +101,10 @@ module.exports = FM = {
   },
 
   makeFile(fileName) {
+    if (selectedRepoPath === null) {
+      console.log(`현재 선택된 저장소가 없습니다.`);
+      return;
+    }
     fs.writeFileSync(
       `${selectedRepoPath}/Working Directory/Untracked/${fileName}.txt`,
       "init",
