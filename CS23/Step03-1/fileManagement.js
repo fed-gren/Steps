@@ -52,15 +52,21 @@ module.exports = FM = {
     }
     const repoPath = `${localPath}/${repoName}`;
     const workingDirPath = `${repoPath}/Working Directory`;
+    const untrackedPath = `${workingDirPath}/Untracked`;
+    const modifiedPath = `${workingDirPath}/Modified`;
     const stagingAreaPath = `${repoPath}/Staging Area`;
     const gitRepoPath = `${repoPath}/Git Repository`;
 
-    const workingDirFiles = fs.readdirSync(workingDirPath);
+    const untrackedFiles = fs.readdirSync(untrackedPath);
+    const modifiedFiles = fs.readdirSync(modifiedPath);
     const stagingAreaFiles = fs.readdirSync(stagingAreaPath);
     const gitRepoFiles = fs.readdirSync(gitRepoPath);
 
     console.log(`---Working Directory`);
-    workingDirFiles.forEach(file => {
+    untrackedFiles.forEach(file => {
+      console.log(file);
+    });
+    modifiedFiles.forEach(file => {
       console.log(file);
     });
     console.log(`---Staging Area`);
