@@ -150,5 +150,49 @@ module.exports = FM = {
     gitRepoFiles.forEach(file => {
       console.log(`${file}\t${fs.statSync(`${gitRepoFiles}/${file}`).mtime}`);
     });
+  },
+
+  moveToStagingArea(fileName) {
+    //fileName이라는 이름을 가진 파일이 현재 레포 Working Directory 안에 있으면,
+    //Staging area로 이동
+    if (selectedRepoPath === null) {
+      console.log(`현재 선택된 저장소가 없습니다.`);
+      return;
+    }
+
+    const workingDirPath = `${selectedRepoPath}/Working Directory`;
+    const untrackedPath = `${workingDirPath}/Untracked`;
+    const modifiedPath = `${workingDirPath}/Modified`;
+    const stagingAreaPath = `${selectedRepoPath}/Staging Area`;
+
+    const untrackedFiles = fs.readdirSync(untrackedPath);
+    const modifiedFiles = fs.readdirSync(modifiedPath);
+
+    console.log(untrackedFiles);
+
+    let fileExistFlag = false;
+    fileExistFlag =
+      fileExistFlag || untrackedFiles.some(file => file === fileName);
+
+    if (fileExistFlag) {
+      let oldFilePath = `${untrackedPath}/${fileName}`;
+      let newFilePath = `${stagingAreaPath}/${fileName}`;
+      fs.renameSync(oldFilePath, newFilePath);
+      return;
+    }
+
+    fileExistFlag =
+      fileExistFlag || modifiedFiles.some(file => file === fileName);
+    if (fileExistFlag) {
+      let oldFilePath = `${modifiedPath}/${fileName}`;
+      let newFilePath = `${stagingAreaPath}/${fileName}`;
+      fs.renameSync(oldFilePath, newFilePath);
+      return;
+    }
+
+    if (!fileExistFlag) {
+      console.log("그런 파일 또 없습니다.");
+      return;
+    }
   }
 };
