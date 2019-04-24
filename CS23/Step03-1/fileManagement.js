@@ -70,18 +70,20 @@ module.exports = FM = {
 
     console.log(`---Working Directory`);
     untrackedFiles.forEach(file => {
-      console.log(file);
+      console.log(`${file}\t${fs.statSync(`${untrackedPath}/${file}`).mtime}`);
     });
     modifiedFiles.forEach(file => {
-      console.log(file);
+      console.log(`${file}\t${fs.statSync(`${modifiedPath}/${file}`).mtime}`);
     });
     console.log(`---Staging Area`);
     stagingAreaFiles.forEach(file => {
-      console.log(file);
+      console.log(
+        `${file}\t${fs.statSync(`${stagingAreaFiles}/${file}`).mtime}`
+      );
     });
     console.log(`---Git Repository`);
     gitRepoFiles.forEach(file => {
-      console.log(file);
+      console.log(`${file}\t${fs.statSync(`${gitRepoFiles}/${file}`).mtime}`);
     });
   },
 
