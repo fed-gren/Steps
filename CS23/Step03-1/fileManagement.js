@@ -71,7 +71,7 @@ module.exports = FM = {
     });
   },
 
-  checkout(repoName) {
+  checkoutRepo(repoName) {
     //저장소 이동
     const repoExsitFlag = checkExistRepo(repoName);
     if (!repoExsitFlag) {
@@ -79,8 +79,8 @@ module.exports = FM = {
         `${repoName} 저장소가 존재하지 않습니다. 로컬 저장소 목록 : `
       );
       printAllLocalRepo();
-      return;
+      return null;
     }
-    //set prompt string
+    return repoName;
   }
 };
