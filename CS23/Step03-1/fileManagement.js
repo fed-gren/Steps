@@ -5,6 +5,8 @@ const remotePath = `${__dirname}/remote`;
 
 const repoList = fs.readdirSync(localPath);
 
+let selectedRepoPath;
+
 //필요한 기능 : 파일 생성, 폴더 검색해서 문자열 리턴
 
 const checkExistRepo = repoName => {
@@ -81,6 +83,16 @@ module.exports = FM = {
       printAllLocalRepo();
       return null;
     }
+    selectedRepoPath = `${localPath}/${repoName}`;
+    console.log(`선택된 저장소 : ${selectedRepoPath}`);
     return repoName;
+  },
+
+  makeFile(fileName) {
+    fs.writeFileSync(
+      `${selectedRepoPath}/Working Directory/${fileName}.txt`,
+      "init",
+      "utf8"
+    );
   }
 };
