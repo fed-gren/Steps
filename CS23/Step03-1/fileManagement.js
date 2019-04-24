@@ -214,5 +214,32 @@ module.exports = FM = {
       newFilePath = `${gitRepoPath}/${file}`;
       fs.renameSync(oldFilePath, newFilePath);
     });
+  },
+
+  moveToModified(fileName) {
+    //commit 해서 Git Repository에 있는 파일 Working Directory/Modified로 이동
+    if (selectedRepoPath === null) {
+      console.log(`현재 선택된 저장소가 없습니다.`);
+      return;
+    }
+    const gitRepoPath = `${selectedRepoPath}/Git Repository`;
+    const workingDirPath = `${selectedRepoPath}/Working Directory`;
+    const modifiedPath = `${workingDirPath}/Modified`;
+    const gitRepoFiles = fs.readdirSync(gitRepoPath);
+
+    let fileExistFlag = false;
+    fileExistFlag =
+      fileExistFlag || gitRepoFiles.some(file => file === fileName);
+    if (fileExistFlag) {
+      let oldFilePath = `${gitRepoPath}/${fileName}`;
+      let newFilePath = `${modifiedPath}/${fileName}`;
+      fs.renameSync(oldFilePath, newFilePath);
+      return;
+    }
+
+    if (!fileExistFlag) {
+      console.log("그런 파일 또 없습니다.");
+      return;
+    }
   }
 };
