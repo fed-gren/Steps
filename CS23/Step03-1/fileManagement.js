@@ -241,5 +241,27 @@ module.exports = FM = {
       console.log("그런 파일 또 없습니다.");
       return;
     }
+  },
+
+  makeCommitLogFile(commitLog) {
+    //현재 선택된 저장소 폴더 경로에 log.json 파일 생성.
+    // key가 커밋 메시지, values가 그 때 커밋된 파일명, 시간 객체.
+    if (selectedRepoPath === null) {
+      console.log(`현재 선택된 저장소가 없습니다.`);
+      return;
+    }
+
+    const gitRepoPath = `${selectedRepoPath}/Git Repository`;
+    const gitRepoFiles = fs.readdirSync(gitRepoPath);
+
+    const filesObj = {};
+
+    gitRepoFiles.forEach(file => {
+      filesObj[file] = fs.statSync(`${gitRepoPath}/${file}`).mtime;
+    });
+    const options = { encoding: "utf-8", flag: "a+" };
+    let data = fs.readFileSync(`${selectedRepoPath}/log.json`, options);
+    let id = fs.openSync(`${selectedRepoPath}/log.json`, "w+", "666");
+    fs.writeSync(id, data, "utf8");
   }
 };
