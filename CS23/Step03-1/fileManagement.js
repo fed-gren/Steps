@@ -263,5 +263,32 @@ module.exports = FM = {
     let data = fs.readFileSync(`${selectedRepoPath}/log.json`, options);
     let id = fs.openSync(`${selectedRepoPath}/log.json`, "w+", "666");
     fs.writeSync(id, data, "utf8");
+  },
+
+  moveToRemote() {
+    //push 명령 시, 현재 저장소와 동일한 이름의 저장소, 그 아래 Git Repository 폴더 복사해가기.
+    //나중에 commit log 파일도 가져가야함.
+    if (selectedRepoPath === null) {
+      console.log(`현재 선택된 저장소가 없습니다.`);
+      return;
+    }
+    const remotePath = selectedRepoPath.replace("local", "remote");
+    const remoteGitRepoPath = `${remotePath}/Git Repository`;
+    const flag = fs.existsSync(remotePath);
+    if (!flag) {
+      fs.mkdirSync(remotePath);
+      fs.mkdirSync(remoteGitRepoPath);
+    }
+    const localGitRepoPath = `${selectedRepoPath}/Git Repository`;
+    const localGitRepoFiles = fs.readdirSync(localGitRepoPath);
+
+    localGitRepoFiles.forEach(file => {
+      if (!fs.existsSync(`${remoteGitRepoPath}/${file}`)) {
+        fs.copyFileSync(
+          `${localGitRepoPath}/${file}`,
+          `${remoteGitRepoPath}/${file}`
+        );
+      }
+    });
   }
 };
