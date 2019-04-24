@@ -33,10 +33,14 @@ module.exports = FM = {
     }
     const repoPath = `${localPath}/${repoName}`;
     const workingDirPath = `${repoPath}/Working Directory`;
+    const untrackedPath = `${workingDirPath}/Untracked`;
+    const modifiedPath = `${workingDirPath}/Modified`;
     const stagingAreaPath = `${repoPath}/Staging Area`;
     const gitRepoPath = `${repoPath}/Git Repository`;
     fs.mkdirSync(repoPath);
     fs.mkdirSync(workingDirPath);
+    fs.mkdirSync(untrackedPath);
+    fs.mkdirSync(modifiedPath);
     fs.mkdirSync(stagingAreaPath);
     fs.mkdirSync(gitRepoPath);
   },
