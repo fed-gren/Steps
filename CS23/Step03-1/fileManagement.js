@@ -15,6 +15,13 @@ const checkExistRepo = repoName => {
   return repoExsitFlag;
 };
 
+const printAllLocalRepo = () => {
+  const repoList = fs.readdirSync(localPath);
+  for (repo of repoList) {
+    console.log(`${repo}/`);
+  }
+};
+
 module.exports = FM = {
   initRepo(repoName) {
     const repoExsitFlag = checkExistRepo(repoName);
@@ -35,7 +42,10 @@ module.exports = FM = {
   printLocalRepoFiles(repoName) {
     const repoExsitFlag = checkExistRepo(repoName);
     if (!repoExsitFlag) {
-      console.log(`${repoName} 저장소가 존재하지 않습니다.`);
+      console.log(
+        `${repoName} 저장소가 존재하지 않습니다. 로컬 저장소 목록 : `
+      );
+      printAllLocalRepo();
       return;
     }
     const repoPath = `${localPath}/${repoName}`;
