@@ -78,12 +78,12 @@ module.exports = FM = {
     console.log(`---Staging Area`);
     stagingAreaFiles.forEach(file => {
       console.log(
-        `${file}\t${fs.statSync(`${stagingAreaFiles}/${file}`).mtime}`
+        `${file}\t${fs.statSync(`${stagingAreaPath}/${file}`).mtime}`
       );
     });
     console.log(`---Git Repository`);
     gitRepoFiles.forEach(file => {
-      console.log(`${file}\t${fs.statSync(`${gitRepoFiles}/${file}`).mtime}`);
+      console.log(`${file}\t${fs.statSync(`${gitRepoPath}/${file}`).mtime}`);
     });
   },
 
@@ -194,5 +194,25 @@ module.exports = FM = {
       console.log("그런 파일 또 없습니다.");
       return;
     }
+  },
+
+  moveToGitRepo() {
+    //commit 시, staging area에서 git repo로 모두 옮기기.
+    if (selectedRepoPath === null) {
+      console.log(`현재 선택된 저장소가 없습니다.`);
+      return;
+    }
+    const stagingAreaPath = `${selectedRepoPath}/Staging Area`;
+    const gitRepoPath = `${selectedRepoPath}/Git Repository`;
+
+    const stagingAreaFiles = fs.readdirSync(stagingAreaPath);
+    // const gitRepoFiles = fs.readdirSync(gitRepoPath);
+
+    let oldFilePath, newFilePath;
+    stagingAreaFiles.forEach(file => {
+      oldFilePath = `${stagingAreaPath}/${file}`;
+      newFilePath = `${gitRepoPath}/${file}`;
+      fs.renameSync(oldFilePath, newFilePath);
+    });
   }
 };
