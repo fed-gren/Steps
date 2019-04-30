@@ -7,13 +7,14 @@ class Parser {
     this.data = data;
     this.tokenizedData = [];
     this.lexedData = [];
+    this.parsedData = [];
   }
 
   tokenizer() {
     //데이터 모두 빠개버리기
     this.tokenizedData = this.data.split("");
     this.tokenizedData = this.joinLiterals();
-    print(this.tokenizedData);
+    // print(this.tokenizedData);
   }
 
   lexer() {
@@ -31,10 +32,32 @@ class Parser {
         return word;
       }
     });
-    print(this.lexedData);
+    // print(this.lexedData);
   }
 
-  parser() {}
+  parser(parsedDataObj) {
+    //입력으로 들어온 배열에 데이터 추가하기.
+    let word = this.lexedData[0];
+    if(word === separators.endOfArray) {
+      this.lexedData.shift();
+      return;
+    } else if(word === separators.startOfArray) {
+      const obj = {
+        type:"array",
+        child:[]
+      }
+      parsedDataObj.child.push(obj);
+      this.lexedData.shift();
+      this.parser(obj);
+    } else if (typeof word === "object") {
+      parsedDataObj.child.push(word);
+      this.lexedData.shift();
+      this.parser(parsedDataObj);
+    } else {
+      this.lexedData.shift();
+      this.parser(parsedDataObj);
+    }
+  }
 
   isSeparator(letter) {
     for (let separator of Object.values(separators)) {
@@ -79,8 +102,15 @@ class Parser {
   }
 }
 
-// const str = "[123, 22, 33]";
-const str = "[123, [1,2,3], [3]]";
+const str = "[123, 22, 33]";
+// const str = "[123, [456]]";
 const parser = new Parser(str);
+const result = {
+  child: []
+};
 parser.tokenizer();
 parser.lexer();
+parser.parser(result);
+const resultObj = result.child[0];
+print(resultObj);
+print(JSON.stringify(resultObj, null, 2));
