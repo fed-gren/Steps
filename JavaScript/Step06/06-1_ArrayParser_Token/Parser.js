@@ -5,34 +5,37 @@ const print = console.log;
 class Parser {
   constructor(data) {
     this.data = data;
-    this.lexedData = [];
     this.tokenizedData = [];
+    this.lexedData = [];
   }
 
   tokenizer() {
     //데이터 모두 빠개버리기
     this.tokenizedData = this.data.split("");
+    this.tokenizedData = this.joinLiterals();
+    print(this.tokenizedData);
   }
 
   lexer() {
     //배열 돌면서 의미있는 데이터로 만들기
     //'[', ']', 'number', ',' (나중엔 number 뿐만 아니라 다른 데이터 형도 인지해서 추가해야한다.(string, boolean, null))
-    //separator가 아닌 데이터는 다 합치기
-
-    this.lexedData = this.data.split("");
-    this.isSeparator();
-    // this.lexedData.forEach((letter) => print(this.isSeparator(letter)));
-    const token = {};
-    print(this.joinLiterals());
+    const lexedObj = {};
     const joinedLiteralData = this.joinLiterals();
-    joinedLiteralData.forEach(word => {
+    this.lexedData = joinedLiteralData.map((word) => {
       if (!this.isSeparator(word)) {
-        token.type = this.getLiteralsType(word);
-        token.value = word;
-        token.child = []; //array인 경우 추가
-        print(token);
+        lexedObj.type = this.getLiteralsType(word);
+        lexedObj.value = word;
+        lexedObj.child = []; //array인 경우 추가
+        return {...lexedObj};
+      } else {
+        return word;
       }
     });
+    print(this.lexedData);
+  }
+
+  parser() {
+
   }
 
   isSeparator(letter) {
@@ -55,6 +58,7 @@ class Parser {
   }
 
   joinLiterals() {
+    //separator가 아닌 데이터는 다 합치기
     let data = "";
     const literalsJoinedArray = this.tokenizedData
       .map((letter, idx) => {
@@ -65,15 +69,13 @@ class Parser {
           data += letter;
           if (
             idx < this.tokenizedData.length - 1 &&
-            this.isSeparator(this.lexedData[idx + 1])
+            this.isSeparator(this.tokenizedData[idx + 1])
           ) {
             return data.trim();
           }
         }
       })
-      .filter(letter => {
-        return letter !== undefined;
-      });
+      .filter(letter => letter !== undefined);
     return literalsJoinedArray;
   }
 }
