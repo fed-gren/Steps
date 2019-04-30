@@ -20,6 +20,12 @@ class Parser {
     //'[', ']', 'number', ',' (나중엔 number 뿐만 아니라 다른 데이터 형도 인지해서 추가해야한다.(string, boolean, null))
     //separator가 아닌 데이터는 다 합치기
     print(this.joinLiterals());
+    const joinedLiteralData = this.joinLiterals();
+    joinedLiteralData.forEach((word) => {
+      if(!this.isSeparator(word)) {
+        print(this.getLiteralsType(word));
+      }
+    });
   }
 
   isSeparator(letter) {
@@ -27,6 +33,18 @@ class Parser {
       if(letter === separator) return true;
     }
     return false;
+  }
+
+  getLiteralsType(word) {
+    if(Number.isFinite(Number(word))) {
+      return literals.number;
+    } else if(word === "false" || word === "true") {
+      return literals.boolean;
+    } else if(word === "null") {
+      return literals.null;
+    } else {
+      return literals.string;
+    }
   }
 
   joinLiterals() {
@@ -37,7 +55,7 @@ class Parser {
         return letter;
       } else {
         data += letter;
-        if(idx < this.lexedData.length-1 && this.isSeparator(this.lexedData[idx + 1])) {
+        if(idx < this.lexedData.length - 1 && this.isSeparator(this.lexedData[idx + 1])) {
           return data.trim();
         }
       }
