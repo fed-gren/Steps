@@ -1,14 +1,13 @@
 const validator = require("./validator.js");
 const historyQueue = require("./historyQueue");
 const todoList = [];
-let incrementId = 0;
 
 const todoUtils = {
   sleep: function(msec) {
     return new Promise(resolve => setTimeout(resolve, msec));
   },
-  generateId: function() {
-    return incrementId++;
+  incrementId: function(todoId) {
+    return (todoId += 1);
   },
   getListByStatus: function(status) {
     return todoList.filter(el => el.status === status);
@@ -39,12 +38,16 @@ const todoUtils = {
 };
 
 class Todos {
+  constructor() {
+    this.todoId = 0;
+  }
   async add(name, tag) {
     if (validator.checkTagShape(tag)) {
       throw Error("TAG_SHAPE_ERROR");
     }
+    this.todoId = todoUtils.incrementId(this.todoId);
     const todo = {
-      id: todoUtils.generateId(),
+      id: this.todoId,
       name,
       status: "todo",
       tag: tag.replace(/\[|\]|\"|\'|\s/g, "").split(",")
