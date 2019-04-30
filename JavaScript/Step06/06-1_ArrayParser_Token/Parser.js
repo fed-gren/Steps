@@ -21,12 +21,12 @@ class Parser {
     //'[', ']', 'number', ',' (나중엔 number 뿐만 아니라 다른 데이터 형도 인지해서 추가해야한다.(string, boolean, null))
     const lexedObj = {};
     const joinedLiteralData = this.joinLiterals();
-    this.lexedData = joinedLiteralData.map((word) => {
+    this.lexedData = joinedLiteralData.map(word => {
       if (!this.isSeparator(word)) {
         lexedObj.type = this.getLiteralsType(word);
         lexedObj.value = word;
         lexedObj.child = []; //array인 경우 추가
-        return {...lexedObj};
+        return { ...lexedObj };
       } else {
         return word;
       }
@@ -34,9 +34,7 @@ class Parser {
     print(this.lexedData);
   }
 
-  parser() {
-
-  }
+  parser() {}
 
   isSeparator(letter) {
     for (let separator of Object.values(separators)) {
@@ -69,7 +67,8 @@ class Parser {
           data += letter;
           if (
             idx < this.tokenizedData.length - 1 &&
-            this.isSeparator(this.tokenizedData[idx + 1])
+            (this.tokenizedData[idx + 1] === separators.rest ||
+              this.tokenizedData[idx + 1] === separators.endOfArray)
           ) {
             return data.trim();
           }
@@ -80,7 +79,8 @@ class Parser {
   }
 }
 
-const str = "[123, 22, 33]";
+// const str = "[123, 22, 33]";
+const str = "[123, [1,2,3], [3]]";
 const parser = new Parser(str);
 parser.tokenizer();
 parser.lexer();
