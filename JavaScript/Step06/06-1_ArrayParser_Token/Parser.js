@@ -12,26 +12,40 @@ const parserUtils = {
     return false;
   },
 
+  isEndofLiteral: function(idx, decomposedDataArr) {
+    if (
+      decomposedDataArr[idx + 1] === separators.rest ||
+      decomposedDataArr[idx + 1] === separators.endOfArray
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+
+  getTokenizedWord: function(letter, idx, decomposedDataArr) {
+    if (this.isSeparator(letter)) {
+      data = "";
+      return letter;
+    } else {
+      data += letter;
+      if (this.isEndofLiteral(idx, decomposedDataArr)) {
+        return data.trim();
+      }
+    }
+  },
+
   joinLiterals: function(decomposedDataArr) {
-    let data = "";
-    const literalsJoinedArr = decomposedDataArr
-      .map((letter, idx) => {
-        if (this.isSeparator(letter)) {
-          data = "";
-          return letter;
-        } else {
-          data += letter;
-          if (
-            idx < decomposedDataArr.length - 1 &&
-            (decomposedDataArr[idx + 1] === separators.rest ||
-              decomposedDataArr[idx + 1] === separators.endOfArray)
-          ) {
-            return data.trim();
-          }
-        }
-      })
-      .filter(letter => letter !== undefined);
-    return literalsJoinedArr;
+    return decomposedDataArr.map((letter, idx, arr) =>
+      this.getTokenizedWord(letter, idx, arr)
+    );
+  },
+
+  makeTokenizedData: function(decomposedDataArr) {
+    const literalsJoinedArr = this.joinLiterals(decomposedDataArr);
+
+    const result = literalsJoinedArr.filter(letter => letter !== undefined);
+    return result;
   },
 
   getLiteralsType(word) {
@@ -61,13 +75,13 @@ class Parser {
       return;
     }
     const decomposedDataArr = unparsedData.split("");
-    this.tokenizedData = parserUtils.joinLiterals(decomposedDataArr);
+    this.tokenizedData = parserUtils.makeTokenizedData(decomposedDataArr);
   }
 
   lexing() {
     //tokenizedData의 요소들을 검사하여 의미를 부여한다.
     //결과를 lexedData에 저장
-    if(this.tokenizedData === undefined) {
+    if (this.tokenizedData === undefined) {
       log(errorMessages.NO_TOKENIZED_DATA);
       return;
     }
@@ -87,14 +101,14 @@ class Parser {
   parsing(parsingDataObj) {
     //구분자를 확인해서 JSON 객체 데이터 생성
     let word = this.lexedData[0];
-    if(word === separators.endOfArray) {
+    if (word === separators.endOfArray) {
       this.lexedData.shift();
       return;
-    } else if(word === separators.startOfArray) {
+    } else if (word === separators.startOfArray) {
       const newArrObj = {
-        type:"array",
-        child:[]
-      }
+        type: "array",
+        child: []
+      };
       parsingDataObj.child.push(newArrObj);
       this.lexedData.shift();
       this.parsing(newArrObj);
@@ -114,7 +128,7 @@ class Parser {
     this.lexing();
     const resultObj = {
       child: []
-    }
+    };
     this.parsing(resultObj);
     const resultText = JSON.stringify(resultObj.child[0], null, 2);
     log(resultText);
