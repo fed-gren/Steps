@@ -1,70 +1,38 @@
-const literals = require("./literals");
 const separators = require("./separators");
-const print = console.log;
+const literals = require("./literals");
+const errorMessages = require("./errorMessages");
 
-class Parser {
-  constructor(data) {
-    this.data = data;
-    this.tokenizedData = [];
-    this.lexedData = [];
-    this.parsedData = [];
-  }
+const { log } = console;
 
-  tokenizer() {
-    //데이터 모두 빠개버리기
-    this.tokenizedData = this.data.split("");
-    this.tokenizedData = this.joinLiterals();
-    // print(this.tokenizedData);
-  }
-
-  lexer() {
-    //배열 돌면서 의미있는 데이터로 만들기
-    //'[', ']', 'number', ',' (나중엔 number 뿐만 아니라 다른 데이터 형도 인지해서 추가해야한다.(string, boolean, null))
-    const lexedObj = {};
-    const joinedLiteralData = this.joinLiterals();
-    this.lexedData = joinedLiteralData.map(word => {
-      if (!this.isSeparator(word)) {
-        lexedObj.type = this.getLiteralsType(word);
-        lexedObj.value = word;
-        lexedObj.child = []; //array인 경우 추가
-        return { ...lexedObj };
-      } else {
-        return word;
-      }
-    });
-    // print(this.lexedData);
-  }
-
-  parser(parsedDataObj) {
-    //입력으로 들어온 배열에 데이터 추가하기.
-    let word = this.lexedData[0];
-    if(word === separators.endOfArray) {
-      this.lexedData.shift();
-      return;
-    } else if(word === separators.startOfArray) {
-      const obj = {
-        type:"array",
-        child:[]
-      }
-      parsedDataObj.child.push(obj);
-      this.lexedData.shift();
-      this.parser(obj);
-    } else if (typeof word === "object") {
-      parsedDataObj.child.push(word);
-      this.lexedData.shift();
-      this.parser(parsedDataObj);
-    } else {
-      this.lexedData.shift();
-      this.parser(parsedDataObj);
-    }
-  }
-
-  isSeparator(letter) {
+const parserUtils = {
+  isSeparator: function(letter) {
     for (let separator of Object.values(separators)) {
       if (letter === separator) return true;
     }
     return false;
-  }
+  },
+
+  joinLiterals: function(decomposedDataArr) {
+    let data = "";
+    const literalsJoinedArr = decomposedDataArr
+      .map((letter, idx) => {
+        if (this.isSeparator(letter)) {
+          data = "";
+          return letter;
+        } else {
+          data += letter;
+          if (
+            idx < decomposedDataArr.length - 1 &&
+            (decomposedDataArr[idx + 1] === separators.rest ||
+              decomposedDataArr[idx + 1] === separators.endOfArray)
+          ) {
+            return data.trim();
+          }
+        }
+      })
+      .filter(letter => letter !== undefined);
+    return literalsJoinedArr;
+  },
 
   getLiteralsType(word) {
     if (Number.isFinite(Number(word))) {
@@ -77,40 +45,79 @@ class Parser {
       return literals.string;
     }
   }
+};
+class Parser {
+  constructor() {
+    this.tokenizedData = [];
+    this.lexedData = [];
+  }
 
-  joinLiterals() {
-    //separator가 아닌 데이터는 다 합치기
-    let data = "";
-    const literalsJoinedArray = this.tokenizedData
-      .map((letter, idx) => {
-        if (this.isSeparator(letter)) {
-          data = "";
-          return letter;
-        } else {
-          data += letter;
-          if (
-            idx < this.tokenizedData.length - 1 &&
-            (this.tokenizedData[idx + 1] === separators.rest ||
-              this.tokenizedData[idx + 1] === separators.endOfArray)
-          ) {
-            return data.trim();
-          }
-        }
-      })
-      .filter(letter => letter !== undefined);
-    return literalsJoinedArray;
+  tokenizing() {
+    //unparsedData를 모두 분해한 뒤, 토큰화(의미 있는 묶음으로 만듦)한다.
+    //결과를 tokenizedData에 저장
+    if (this.unparsedData === undefined) {
+      log(errorMessages.NO_PARSING_DATA);
+      return;
+    }
+    const decomposedDataArr = this.unparsedData.split("");
+    this.tokenizedData = parserUtils.joinLiterals(decomposedDataArr);
+  }
+
+  lexing() {
+    //tokenizedData의 요소들을 검사하여 의미를 부여한다.
+    //결과를 lexedData에 저장
+    if(this.tokenizedData === undefined) {
+      log(errorMessages.NO_TOKENIZED_DATA);
+      return;
+    }
+    const lexedObj = {};
+    this.lexedData = this.tokenizedData.map(word => {
+      if (!parserUtils.isSeparator(word)) {
+        lexedObj.type = parserUtils.getLiteralsType(word);
+        lexedObj.value = word;
+        lexedObj.child = []; //array인 경우 추가
+        return { ...lexedObj };
+      } else {
+        return word;
+      }
+    });
+  }
+
+  parsing(parsingDataObj) {
+    //구분자를 확인해서 JSON 객체 데이터 생성
+    let word = this.lexedData[0];
+    if(word === separators.endOfArray) {
+      this.lexedData.shift();
+      return;
+    } else if(word === separators.startOfArray) {
+      const newArrObj = {
+        type:"array",
+        child:[]
+      }
+      parsingDataObj.child.push(newArrObj);
+      this.lexedData.shift();
+      this.parsing(newArrObj);
+    } else if (typeof word === "object") {
+      parsingDataObj.child.push(word);
+      this.lexedData.shift();
+      this.parsing(parsingDataObj);
+    } else {
+      this.lexedData.shift();
+      this.parsing(parsingDataObj);
+    }
+  }
+
+  array(unparsedArray) {
+    this.unparsedData = unparsedArray;
+    this.tokenizing();
+    this.lexing();
+    const resultObj = {
+      child: []
+    }
+    this.parsing(resultObj);
+    const resultText = JSON.stringify(resultObj.child[0], null, 2);
+    log(resultText);
   }
 }
 
-const str = "[123, 22, 33]";
-// const str = "[123, [456]]";
-const parser = new Parser(str);
-const result = {
-  child: []
-};
-parser.tokenizer();
-parser.lexer();
-parser.parser(result);
-const resultObj = result.child[0];
-print(resultObj);
-print(JSON.stringify(resultObj, null, 2));
+module.exports = Parser;
