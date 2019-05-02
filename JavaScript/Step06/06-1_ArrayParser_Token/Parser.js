@@ -46,20 +46,21 @@ const parserUtils = {
     }
   }
 };
+
 class Parser {
   constructor() {
     this.tokenizedData = [];
     this.lexedData = [];
   }
 
-  tokenizing() {
+  tokenizing(unparsedData) {
     //unparsedData를 모두 분해한 뒤, 토큰화(의미 있는 묶음으로 만듦)한다.
     //결과를 tokenizedData에 저장
-    if (this.unparsedData === undefined) {
+    if (unparsedData === undefined) {
       log(errorMessages.NO_PARSING_DATA);
       return;
     }
-    const decomposedDataArr = this.unparsedData.split("");
+    const decomposedDataArr = unparsedData.split("");
     this.tokenizedData = parserUtils.joinLiterals(decomposedDataArr);
   }
 
@@ -108,8 +109,8 @@ class Parser {
   }
 
   array(unparsedArray) {
-    this.unparsedData = unparsedArray;
-    this.tokenizing();
+    const unparsedData = unparsedArray;
+    this.tokenizing(unparsedData);
     this.lexing();
     const resultObj = {
       child: []
